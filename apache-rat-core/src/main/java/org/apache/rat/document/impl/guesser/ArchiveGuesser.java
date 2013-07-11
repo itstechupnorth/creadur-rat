@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.document.impl.guesser;
 
 import java.util.Locale;
@@ -23,30 +23,38 @@ import java.util.Locale;
 import org.apache.rat.api.Document;
 
 public class ArchiveGuesser {
-    
-    public static final String[] ARCHIVE_EXTENSIONS = {
-        "jar", "gz",
-        "zip", "tar",
-        "bz", "bz2",
-        "rar", "war",
-    };
 
-    public static final boolean isArchive(final Document document) {
-        return isArchive(document.getName());
+    private static final String[] ARCHIVE_EXTENSIONS = { "jar", "gz", "zip",
+            "tar", "bz", "bz2", "rar", "war", };
+
+    private final String[] archiveExtensions;
+
+    public ArchiveGuesser() {
+        this(ARCHIVE_EXTENSIONS);
+    }
+
+    public ArchiveGuesser(final String[] archiveExtensions) {
+        super();
+        this.archiveExtensions = archiveExtensions;
+    }
+
+    public boolean matches(final Document subject) {
+        return isArchive(subject.getName());
     }
 
     /**
      * Is a file by that name an archive?
      */
-    public static final boolean isArchive(final String name) {
-        if (name == null) {return false;}
-        String nameToLower = name.toLowerCase(Locale.US);
-        for (int i = 0; i < ArchiveGuesser.ARCHIVE_EXTENSIONS.length; i++) {
-            if (nameToLower.endsWith("." + ArchiveGuesser.ARCHIVE_EXTENSIONS[i])) {
+    public boolean isArchive(final String name) {
+        if (name == null) {
+            return false;
+        }
+        final String nameToLower = name.toLowerCase(Locale.US);
+        for (final String element : this.archiveExtensions) {
+            if (nameToLower.endsWith("." + element)) {
                 return true;
             }
         }
         return false;
     }
-
 }
