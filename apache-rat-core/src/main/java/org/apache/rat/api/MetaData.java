@@ -178,10 +178,17 @@ public class MetaData {
 	 */
 	private final List<Datum> data;
 
+	/**
+	 * 
+	 */
 	public MetaData() {
 		this(null);
 	}
 
+	/**
+	 * 
+	 * @param contentType
+	 */
 	public MetaData(final ContentType contentType) {
 		this.contentType = contentType;
 		this.data = new ArrayList<Datum>(16);
