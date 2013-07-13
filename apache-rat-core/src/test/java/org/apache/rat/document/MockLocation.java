@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.document;
 
 import java.io.IOException;
@@ -24,49 +24,90 @@ import java.io.Reader;
 
 import org.apache.rat.api.Document;
 import org.apache.rat.api.MetaData;
-
+/**
+ * 
+ * @author Manuel
+ *
+ */
 public class MockLocation implements Document {
 
-    public String name;
-    public String url;
-    private final MetaData metaData = new MetaData();
-    
-    public MockLocation() {
-        this("name", "url");
-    }
-    
-    public MockLocation(String name) {
-        this(name, "url");
-    }
+	public String name;
+	public String url;
+	private final MetaData metaData = new MetaData();
 
-    public MockLocation(String name, String url) {
-        super();
-        this.name = name;
-        this.url = url;
-    }
+	/**
+	 * 
+	 */
+	public MockLocation() {
+		this("name", "url");
+	}
 
-    public String getName() {
-        return name;
-    }
+	/**
+	 * 
+	 * @param name
+	 */
+	public MockLocation(final String name) {
+		this(name, "url");
+	}
 
-    public String getURL() {
-        return url;
-    }
+	/**
+	 * 
+	 * @param name
+	 * @param url
+	 */
+	public MockLocation(final String name, final String url) {
+		super();
+		this.name = name;
+		this.url = url;
+	}
 
-    public boolean isComposite() {
-        return false;
-    }
+	/**
+	 * 
+	 * @return
+	 */
+	public String getName() {
+		return name;
+	}
 
-    public Reader reader() throws IOException {
-        throw new UnsupportedOperationException();
-    }
+	/**
+	 * 
+	 * @return
+	 */
+	public String getURL() {
+		return url;
+	}
 
-    public MetaData getMetaData() {
-        return metaData;
-    }
-    
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean isComposite() {
+		return false;
+	}
 
-    public InputStream inputStream() throws IOException {
-        throw new UnsupportedOperationException();
-    }
+	/**
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	public Reader reader() throws IOException {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public MetaData getMetaData() {
+		return metaData;
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	public InputStream inputStream() throws IOException {
+		throw new UnsupportedOperationException();
+	}
 }
