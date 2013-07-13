@@ -268,10 +268,8 @@ public class MetaData {
 	 */
 	public String value(final String name) {
 		final Datum datum = get(name);
-		final String result;
-		if (datum == null) {
-			result = null;
-		} else {
+		String result = null;
+		if (datum != null) {
 			result = datum.getValue();
 		}
 		return result;
