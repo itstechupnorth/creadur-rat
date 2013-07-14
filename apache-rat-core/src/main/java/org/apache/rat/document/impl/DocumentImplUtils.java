@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.document.impl;
 
 import java.io.File;
@@ -27,34 +27,61 @@ import java.util.zip.ZipInputStream;
 
 import org.apache.commons.io.IOUtils;
 
-public class DocumentImplUtils {
+/**
+ *
+ */
+public final class DocumentImplUtils {
 
-    public final static String toName(File file) {
-        String path = file.getPath();
-        String normalisedPath = path.replace('\\', '/');
-        return normalisedPath;
-    }
-    
-    public static final boolean isZipStream(InputStream stream) {
-        ZipInputStream zip = new ZipInputStream(stream);
-        try {
-            zip.getNextEntry();
-            return true;
-        } catch (ZipException e) {
-            return false;
-        } catch (IOException e) {
-            return false;
-        } finally {
-            IOUtils.closeQuietly(zip);
-        }
-    }
+	/**
+	 * 
+	 */
+	private DocumentImplUtils() {
+		super();
+	}
 
-    public static final boolean isZip(File file) {
-        try {
-            return isZipStream(new FileInputStream(file));
-        } catch (IOException e) {
-            return false;
-        }
-    }
+	/**
+	 * 
+	 * @param file
+	 * @return
+	 */
+	public final static String toName(final File file) {
+		String path = file.getPath();
+		return path.replace('\\', '/');
+	}
+
+	/**
+	 * 
+	 * @param stream
+	 * @return
+	 */
+	public static final boolean isZipStream(final InputStream stream) {
+		ZipInputStream zip = new ZipInputStream(stream);
+		boolean result = true;
+		try {
+			zip.getNextEntry();
+		} catch (ZipException e) {
+			result = false;
+		} catch (IOException e) {
+			result = false;
+		} finally {
+			IOUtils.closeQuietly(zip);
+		}
+		return result;
+	}
+
+	/**
+	 * 
+	 * @param file
+	 * @return
+	 */
+	public static final boolean isZip(final File file) {
+		boolean result;
+		try {
+			result = isZipStream(new FileInputStream(file));
+		} catch (IOException e) {
+			result = false;
+		}
+		return result;
+	}
 
 }
