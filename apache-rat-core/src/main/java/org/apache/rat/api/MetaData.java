@@ -171,7 +171,6 @@ public class MetaData {
 	public static final Datum RAT_APPROVED_LICENSE_DATIM_FALSE = new Datum(
 			RAT_URL_APPROVED_LICENSE, RAT_APPROVED_LICENSE_VALUE_FALSE);
 
-	private ContentType contentType;
 	/**
 	 * Only likely to be a small quantity of data so trade some performance for
 	 * simplicity.
@@ -182,36 +181,7 @@ public class MetaData {
 	 * 
 	 */
 	public MetaData() {
-		this(null);
-	}
-
-	/**
-	 * 
-	 * @param contentType
-	 */
-	public MetaData(final ContentType contentType) {
-		this.contentType = contentType;
 		this.data = new ArrayList<Datum>(16);
-	}
-
-	/**
-	 * Gets the content type for the subject.
-	 * 
-	 * @return or null when the type is unknown
-	 */
-	public ContentType getContentType() {
-		return contentType;
-	}
-
-	/**
-	 * Sets the content type for this subject.
-	 * 
-	 * @param contentType
-	 *            <code>ContentType</code>, or null when the content type is
-	 *            unknown
-	 */
-	public void setContentType(final ContentType contentType) {
-		this.contentType = contentType;
 	}
 
 	/**
@@ -306,7 +276,6 @@ public class MetaData {
 	 */
 	public void clear() {
 		data.clear();
-		this.contentType = null;
 	}
 
 	/**
