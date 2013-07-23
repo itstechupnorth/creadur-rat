@@ -22,45 +22,63 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.rat.analysis.IHeaderMatcher;
 import org.apache.rat.api.Document;
 import org.apache.rat.document.MockLocation;
 import org.apache.rat.test.utils.Resources;
-import org.junit.Assert;
 
-class DirectoryScanner {
+/**
+ * The Class DirectoryScanner.
+ */
+final class DirectoryScanner {
 
-    @SuppressWarnings("boxing")
-    /**
-     * Get list of files in a directory, and scan for license matches
-     * @param directory the directory containing the files
-     * @param matcher the license matcher
-     * @param expected the expected result of the each scan
-     * @throws Exception
-     */
-    public static void testFilesInDir(String directory, IHeaderMatcher matcher, boolean expected) throws Exception {
-        final File[] resourceFiles = Resources.getResourceFiles(directory);
-        if (resourceFiles.length == 0) {
-            Assert.fail("No files found under "+directory);
-        }
-        for(File f : resourceFiles) {
-            final Document subject = new MockLocation(f.toString());
-            BufferedReader br = null;
-            try {
-                boolean result = false;
-                br = Resources.getBufferedReader(f);
-                String line;
-                while(!result && (line = br.readLine()) != null) {
-                    result = matcher.match(subject, line);
-                }
-                assertEquals(f.toString(), expected, result);
-            } finally {
-                matcher.reset();
-                IOUtils.closeQuietly(br);
-            }
-        }
-    }
+	private static final int ZERO = 0;
+
+	/**
+	 * 
+	 */
+	private DirectoryScanner() {
+		super();
+	}
+
+	/**
+	 * Get list of files in a directory, and scan for license matches
+	 * 
+	 * @param directory
+	 *            the directory containing the files
+	 * @param matcher
+	 *            the license matcher
+	 * @param expected
+	 *            the expected result of the each scan
+	 * @throws IOException
+	 */
+	public static void filesInDir(final String directory,
+			final IHeaderMatcher matcher, final boolean expected)
+			throws IOException {
+		final File[] resourceFiles = Resources.getResourceFiles(directory);
+		if (resourceFiles.length == ZERO) {
+			throw new IOException("No files found under " + directory);
+		}
+		for (File file : resourceFiles) {
+			final Document subject = new MockLocation(file.toString());
+			BufferedReader bufferedReader = null;
+			try {
+				boolean result = false;
+				bufferedReader = Resources.getBufferedReader(file);
+				String line = bufferedReader.readLine();
+				while (!result && line != null) {
+					result = matcher.match(subject, line);
+					line = bufferedReader.readLine();
+				}
+				assertEquals(file.toString(), expected, result);
+			} finally {
+				matcher.reset();
+				IOUtils.closeQuietly(bufferedReader);
+			}
+		}
+	}
 
 }
