@@ -15,60 +15,104 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.analysis.license;
 
 import org.apache.rat.analysis.IHeaderMatcher;
 import org.apache.rat.api.Document;
 import org.apache.rat.api.MetaData.Datum;
 
-
 /**
+ * The Class SimplePatternBasedLicense.
+ * 
  * @since Rat 0.8
  */
-public class SimplePatternBasedLicense extends BaseLicense implements IHeaderMatcher {
-    private String[] patterns;
+public class SimplePatternBasedLicense extends BaseLicense implements
+		IHeaderMatcher {
 
-    public SimplePatternBasedLicense() {
-    }
+	/** The patterns. */
+	private String[] patterns;
+	
+	private static final int ZERO = 0;
 
-    protected SimplePatternBasedLicense(Datum pLicenseFamilyCategory, Datum pLicenseFamilyName,
-            String pNotes, String[] pPatterns) {
-        super(pLicenseFamilyCategory, pLicenseFamilyName, pNotes);
-        setPatterns(pPatterns);
-    }
-    
-    public String[] getPatterns() {
-        return patterns;
-    }
+	/**
+	 * Instantiates a new simple pattern based license.
+	 * 
+	 * @param pLicenseFamilyCategory
+	 *            the license family category
+	 * @param pLicenseFamilyName
+	 *            the license family name
+	 * @param pNotes
+	 *            the notes
+	 * @param pPatterns
+	 *            the patterns
+	 */
+	protected SimplePatternBasedLicense(final Datum pLicenseFamilyCategory,
+			final Datum pLicenseFamilyName, final String pNotes, final String... pPatterns) {
+		super(pLicenseFamilyCategory, pLicenseFamilyName, pNotes);
+		setPatterns(pPatterns);
+	}
 
-    public void setPatterns(String[] pPatterns) {
-        patterns = pPatterns;
-    }
+	/**
+	 * Gets the patterns.
+	 * 
+	 * @return the patterns
+	 */
+	public String[] getPatterns() {
+		return patterns.clone();
+	}
 
-    protected boolean matches(String pLine) {
-        if (pLine != null) {
-            final String[] pttrns = getPatterns();
-            if (pttrns != null) {
-                for (String pttrn : pttrns) {
-                    if (pLine.indexOf(pttrn, 0) >= 0) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-    
-    public void reset() {
-        // Nothing to do
-    }
+	/**
+	 * Sets the patterns.
+	 * 
+	 * @param pPatterns
+	 *            the new patterns
+	 */
+	public void setPatterns(final String... pPatterns) {
+		patterns = pPatterns;
+	}
 
-    public boolean match(Document pSubject, String pLine) {
-        final boolean result = matches(pLine);
-        if (result) {
-            reportOnLicense(pSubject);
-        }
-        return result;
-    }
+	/**
+	 * Matches.
+	 * 
+	 * @param pLine
+	 *            the line
+	 * @return true, if successful
+	 */
+	protected boolean matches(final String pLine) {
+		boolean result = false;
+		final String[] pttrns = getPatterns();
+		if (pLine != null && pttrns != null) {
+			for (String pttrn : pttrns) {
+				if (pLine.indexOf(pttrn, 0) >= ZERO) {
+					result = true;
+				}
+			}
+		}
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.analysis.IHeaderMatcher#reset()
+	 */
+	public void reset() {
+		// Nothing to do
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.rat.analysis.IHeaderMatcher#match(org.apache.rat.api.Document,
+	 * java.lang.String)
+	 */
+	public boolean match(final Document pSubject, final String pLine) {
+		final boolean result = matches(pLine);
+		if (result) {
+			reportOnLicense(pSubject);
+		}
+		return result;
+	}
 }

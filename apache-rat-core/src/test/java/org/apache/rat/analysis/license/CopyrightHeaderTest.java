@@ -15,62 +15,57 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.analysis.license;
-
-import org.apache.rat.api.Document;
-import org.apache.rat.api.MetaData;
-import org.apache.rat.document.MockLocation;
-import org.apache.rat.report.claim.impl.xml.MockClaimReporter;
-import org.junit.Before;
-import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.rat.api.Document;
+import org.apache.rat.api.MetaData;
+import org.apache.rat.document.MockLocation;
+import org.junit.Before;
+import org.junit.Test;
+/**
+ * 
+ */
 public class CopyrightHeaderTest {
 
-    private static final String[] MATCHING_HEADERS =
-            { "/*  Copyright 2012 FooBar.*/"
-            , "/*  copyright 2012 foobar.*/"
-            , "/*  Copyright 2012-2013 FooBar.*/" };
-    private static final String[] NON_MATCHING_HEADERS =
-            { "/*  Copyright*/"
-            , "/*  Copyright FooBar.*/"
-            , "/*  Copyright 2013*/"
-            , "/*  Copyright 123a*/"
-            , "/*  Copyright 123f oobar*/"
-            , "/*  Copyright 2013FooBar*/"
-            , "/*  Copyright 2012 2013 FooBar.*/" };
+	private static final String[] MATCHING_HEADERS = {
+			"/*  Copyright 2012 FooBar.*/", "/*  copyright 2012 foobar.*/",
+			"/*  Copyright 2012-2013 FooBar.*/" };
+	private static final String[] NON_MATCHING_HEADERS = { "/*  Copyright*/",
+			"/*  Copyright FooBar.*/", "/*  Copyright 2013*/",
+			"/*  Copyright 123a*/", "/*  Copyright 123f oobar*/",
+			"/*  Copyright 2013FooBar*/", "/*  Copyright 2012 2013 FooBar.*/" };
 
-    CopyrightHeader header;
-    MockClaimReporter reporter;
-    Document subject = new MockLocation("subject");
+	private CopyrightHeader header;
+	private Document subject = new MockLocation("subject");
 
-    @Before
-    public void setUp() throws Exception {
-        header = new CopyrightHeader(MetaData.RAT_LICENSE_FAMILY_CATEGORY_DATUM_ASL,MetaData.RAT_LICENSE_FAMILY_NAME_DATUM_APACHE_LICENSE_VERSION_2_0,"","FooBar");
-        reporter = new MockClaimReporter();
-        subject = new MockLocation("subject");
-    }
+	@Before
+	public void setUp() throws Exception {
+		header = new CopyrightHeader(
+				MetaData.RAT_LICENSE_FAMILY_CATEGORY_DATUM_ASL,
+				MetaData.RAT_LICENSE_FAMILY_NAME_DATUM_APACHE_LICENSE_VERSION_2_0,
+				"", "FooBar");
+		subject = new MockLocation("subject");
+	}
 
-    @Test
-    public void match() throws Exception {
-        for (String line : MATCHING_HEADERS) {
-            assertTrue("Copyright Header should be matched", header.match(subject, line));
-            header.reset();
-            assertFalse("After reset, content should build up again", header.match(subject, "New line"));
-            header.reset();
-        }
-    }
+	@Test
+	public void testMatchCopyrightHeader() {
+		for (String line : MATCHING_HEADERS) {
+			assertTrue("Copyright Header should be matched",
+					header.match(subject, line));
+			header.reset();
+		}
+	}
 
-    @Test
-    public void noMatch() throws Exception {
-        for (String line : NON_MATCHING_HEADERS) {
-            assertFalse("Copyright Header shouldn't be matched", header.match(subject, line));
-            header.reset();
-            assertTrue("After reset, content should build up again", header.match(subject, MATCHING_HEADERS[0]));
-            header.reset();
-        }
-    }
+	@Test
+	public void testNoMatchCopyrightHeader() {
+		for (String line : NON_MATCHING_HEADERS) {
+			assertFalse("Copyright Header shouldn't be matched",
+					header.match(subject, line));
+			header.reset();
+		}
+	}
 }

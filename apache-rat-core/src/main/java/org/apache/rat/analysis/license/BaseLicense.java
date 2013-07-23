@@ -15,78 +15,147 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.analysis.license;
 
 import org.apache.rat.api.Document;
 import org.apache.rat.api.MetaData;
 
+/**
+ * The Class BaseLicense.
+ */
 public class BaseLicense {
-    private String licenseFamilyCategory;
-    private String licenseFamilyName;
-    private String notes;
 
-    public BaseLicense() {
-    }
+	/** The license family category. */
+	private String licenseFamilyCategory;
 
-    public BaseLicense(final MetaData.Datum licenseFamilyCategory, final MetaData.Datum licenseFamilyName, final String notes)
-    {
-        if (!MetaData.RAT_URL_LICENSE_FAMILY_CATEGORY.equals(licenseFamilyCategory.getName())) {
-            throw new IllegalStateException("Expected " + MetaData.RAT_URL_LICENSE_FAMILY_CATEGORY
-                    + ", got " + licenseFamilyCategory.getName());
-        }
-        setLicenseFamilyCategory(licenseFamilyCategory.getValue());
-        if (!MetaData.RAT_URL_LICENSE_FAMILY_NAME.equals(licenseFamilyName.getName())) {
-            throw new IllegalStateException("Expected " + MetaData.RAT_URL_LICENSE_FAMILY_NAME
-                    + ", got " + licenseFamilyName.getName());
-        }
-        setLicenseFamilyName(licenseFamilyName.getValue());
-        setNotes(notes);
-    }
+	/** The license family name. */
+	private String licenseFamilyName;
 
-    public String getLicenseFamilyCategory() {
-        return licenseFamilyCategory;
-    }
+	/** The notes. */
+	private String notes;
 
-    public void setLicenseFamilyCategory(String pDocumentCategory) {
-        licenseFamilyCategory = pDocumentCategory;
-    }
+	/**
+	 * Instantiates a new base license.
+	 * 
+	 * @param licenseFamilyCategory
+	 *            the license family category
+	 * @param licenseFamilyName
+	 *            the license family name
+	 * @param notes
+	 *            the notes
+	 */
+	public BaseLicense(final MetaData.Datum licenseFamilyCategory,
+			final MetaData.Datum licenseFamilyName, final String notes) {
+		if (!MetaData.RAT_URL_LICENSE_FAMILY_CATEGORY
+				.equals(licenseFamilyCategory.getName())) {
+			throw new IllegalStateException("Expected "
+					+ MetaData.RAT_URL_LICENSE_FAMILY_CATEGORY + ", got "
+					+ licenseFamilyCategory.getName());
+		}
+		setLicenseFamilyCategory(licenseFamilyCategory.getValue());
+		if (!MetaData.RAT_URL_LICENSE_FAMILY_NAME.equals(licenseFamilyName
+				.getName())) {
+			throw new IllegalStateException("Expected "
+					+ MetaData.RAT_URL_LICENSE_FAMILY_NAME + ", got "
+					+ licenseFamilyName.getName());
+		}
+		setLicenseFamilyName(licenseFamilyName.getValue());
+		setNotes(notes);
+	}
 
-    public String getLicenseFamilyName() {
-        return licenseFamilyName;
-    }
+	/**
+	 * Gets the license family category.
+	 * 
+	 * @return the license family category
+	 */
+	public String getLicenseFamilyCategory() {
+		return licenseFamilyCategory;
+	}
 
-    public void setLicenseFamilyName(String pLicenseFamilyCategory) {
-        licenseFamilyName = pLicenseFamilyCategory;
-    }
+	/**
+	 * Sets the license family category.
+	 * 
+	 * @param pDocumentCategory
+	 *            the new license family category
+	 */
+	public void setLicenseFamilyCategory(final String pDocumentCategory) {
+		licenseFamilyCategory = pDocumentCategory;
+	}
 
-    public String getNotes() {
-        return notes;
-    }
+	/**
+	 * Gets the license family name.
+	 * 
+	 * @return the license family name
+	 */
+	public String getLicenseFamilyName() {
+		return licenseFamilyName;
+	}
 
-    public void setNotes(String pNotes) {
-        notes = pNotes;
-    }
+	/**
+	 * Sets the license family name.
+	 * 
+	 * @param pLicenseFamilyCategory
+	 *            the new license family name
+	 */
+	public void setLicenseFamilyName(final String pLicenseFamilyCategory) {
+		licenseFamilyName = pLicenseFamilyCategory;
+	}
 
-    public final void reportOnLicense(Document subject) {
-        final MetaData metaData = subject.getMetaData();
-        metaData.set(new MetaData.Datum(MetaData.RAT_URL_HEADER_SAMPLE, notes));
-        final String licFamilyCategory = getLicenseFamilyCategory();
-        metaData.set(new MetaData.Datum(MetaData.RAT_URL_HEADER_CATEGORY, licFamilyCategory));
-        metaData.set(new MetaData.Datum(MetaData.RAT_URL_LICENSE_FAMILY_CATEGORY, licFamilyCategory));
-        metaData.set(new MetaData.Datum(MetaData.RAT_URL_LICENSE_FAMILY_NAME, getLicenseFamilyName()));
-    }
+	/**
+	 * Gets the notes.
+	 * 
+	 * @return the notes
+	 */
+	public String getNotes() {
+		return notes;
+	}
 
-    protected static final String prune(String text) {
-        final int length = text.length();
-        final StringBuilder buffer = new StringBuilder(length);
-        for (int i = 0; i < length; i++) {
-            char at = text.charAt(i);
-            if (Character.isLetterOrDigit(at)) {
-                buffer.append(at);
-            }
-        }
-        return buffer.toString();
-    }
+	/**
+	 * Sets the notes.
+	 * 
+	 * @param pNotes
+	 *            the new notes
+	 */
+	public void setNotes(final String pNotes) {
+		notes = pNotes;
+	}
+
+	/**
+	 * Report on license.
+	 * 
+	 * @param subject
+	 *            the subject
+	 */
+	public final void reportOnLicense(final Document subject) {
+		final MetaData metaData = subject.getMetaData();
+		metaData.set(new MetaData.Datum(MetaData.RAT_URL_HEADER_SAMPLE, notes));
+		final String licFamilyCategory = getLicenseFamilyCategory();
+		metaData.set(new MetaData.Datum(MetaData.RAT_URL_HEADER_CATEGORY,
+				licFamilyCategory));
+		metaData.set(new MetaData.Datum(
+				MetaData.RAT_URL_LICENSE_FAMILY_CATEGORY, licFamilyCategory));
+		metaData.set(new MetaData.Datum(MetaData.RAT_URL_LICENSE_FAMILY_NAME,
+				getLicenseFamilyName()));
+	}
+
+	/**
+	 * Prune.
+	 * 
+	 * @param text
+	 *            the text
+	 * @return the string
+	 */
+	protected static final String prune(final String text) {
+		final int length = text.length();
+		final StringBuilder buffer = new StringBuilder(length);
+		for (int i = 0; i < length; i++) {
+			char charIndex = text.charAt(i);
+			if (Character.isLetterOrDigit(charIndex)) {
+				buffer.append(charIndex);
+			}
+		}
+		return buffer.toString();
+	}
 
 }

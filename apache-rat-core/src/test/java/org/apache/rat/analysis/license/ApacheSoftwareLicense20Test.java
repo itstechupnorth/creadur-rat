@@ -18,53 +18,73 @@
  */ 
 package org.apache.rat.analysis.license;
 
+import org.apache.rat.analysis.license.BaseLicense;
 import org.apache.rat.api.Document;
+import org.apache.rat.api.MetaData;
+import org.apache.rat.api.MetaData.Datum;
 import org.apache.rat.document.MockLocation;
-import org.apache.rat.report.claim.impl.xml.MockClaimReporter;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
+/**
+ * 
+ */
 public class ApacheSoftwareLicense20Test {
-
-    MockClaimReporter reporter;
+	
+	private ApacheSoftwareLicense20 worker;
 
     @Before
-    public void setUp() throws Exception {
-        reporter = new MockClaimReporter();
+    public void setUp() {
+    	worker = new ApacheSoftwareLicense20();
     }
 
     @Test
-    public void matches() throws Exception {
-        ApacheSoftwareLicense20 worker = new ApacheSoftwareLicense20();
-        assertTrue(worker.matches(ApacheSoftwareLicense20.FIRST_LICENSE_LINE));
-        assertTrue(worker.matches("    Licensed under the Apache License, Version 2.0 (the \"License\");"));
-        assertTrue(worker.matches("Licensed under the Apache License, Version 2.0 (the \"License\");"));
-        assertTrue(worker.matches(" * Licensed under the Apache License, Version 2.0 (the \"License\");"));
-        assertTrue(worker.matches(" // Licensed under the Apache License, Version 2.0 (the \"License\");"));
-        assertTrue(worker.matches(" /* Licensed under the Apache License, Version 2.0 (the \"License\");"));
-        assertTrue(worker.matches("    Licensed under the Apache License, Version 2.0 (the \"License\");"));
-        assertTrue(worker.matches(" ## Licensed under the Apache License, Version 2.0 (the \"License\");"));
-        assertTrue(worker.matches(" ## Licensed under the Apache License, Version 2.0 (the \"License\") ##);"));
-        assertFalse(worker.matches("'Behold, Telemachus! (nor fear the sight,)"));
+    public void testMatchesApacheLicense() {
+		assertTrue("Matches the apache license",
+				worker.matches(ApacheSoftwareLicense20.FIRST_LICENSE_LINE));
     }
-
+    
     @Test
-    public void match() throws Exception {
-        ApacheSoftwareLicense20 worker = new ApacheSoftwareLicense20();
+    public void testMatchesNonApacheLicense() {
+		assertFalse("Not Matches the reference apache license",
+				worker.matches("'Behold, Telemachus! (nor fear the sight,)"));
+    }
+    
+    @Test
+    public void testMatchApacheLicenseLine() {
         final Document subject = new MockLocation("subject");
-        assertTrue(worker.match(subject, ApacheSoftwareLicense20.FIRST_LICENSE_LINE));
-        assertTrue(worker.match(subject, "    Licensed under the Apache License, Version 2.0 (the \"License\");"));
-        assertTrue(worker.match(subject, "Licensed under the Apache License, Version 2.0 (the \"License\");"));
-        assertTrue(worker.match(subject, " * Licensed under the Apache License, Version 2.0 (the \"License\");"));
-        assertTrue(worker.match(subject, " // Licensed under the Apache License, Version 2.0 (the \"License\");"));
-        assertTrue(worker.match(subject, " /* Licensed under the Apache License, Version 2.0 (the \"License\");"));
-        assertTrue(worker.match(subject, "    Licensed under the Apache License, Version 2.0 (the \"License\");"));
-        assertTrue(worker.match(subject, " ## Licensed under the Apache License, Version 2.0 (the \"License\");"));
-        assertTrue(worker.match(subject, " ## Licensed under the Apache License, Version 2.0 (the \"License\") ##);"));
-        assertFalse(worker.match(subject, "'Behold, Telemachus! (nor fear the sight,)"));
-    }
+		assertTrue("Match the apache license", worker.match(subject,
+				ApacheSoftwareLicense20.FIRST_LICENSE_LINE));
+	}
+    
+	@Test
+	public void testMatchNonApacheLicense() {
+		final Document subject = new MockLocation("subject");
+		if (worker.getNotes() != null) {
+			assertFalse("Not Match the reference apache license", worker.match(
+					subject, "'Behold, Telemachus! (nor fear the sight,)"));
+		}
+	}
+	
+	@Test(expected = IllegalStateException.class)
+	public void testApacheLicenseIllegalStateFamilyCategory() {
+		Datum licenseFamilyCategory = new Datum("", "");
+		Datum licenseFamilyName = new Datum("", "");
+		String notes = null;
+		new BaseLicense(licenseFamilyCategory,
+				licenseFamilyName, notes);
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void testApacheLicenseIllegalStateFamilyName() {
+		Datum licenseFamilyCategory = new Datum(
+				MetaData.RAT_URL_LICENSE_FAMILY_CATEGORY,
+				MetaData.RAT_URL_LICENSE_FAMILY_CATEGORY);
+		Datum licenseFamilyName = new Datum("", "");
+		String notes = null;
+		new BaseLicense(licenseFamilyCategory, licenseFamilyName, notes);
+	}
 
 }

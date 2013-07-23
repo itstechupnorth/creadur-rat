@@ -15,77 +15,66 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.analysis.license;
 
 import org.apache.rat.analysis.IHeaderMatcher;
 import org.apache.rat.api.Document;
 import org.apache.rat.document.MockLocation;
-import org.apache.rat.report.claim.impl.xml.MockClaimReporter;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- * @author hirsch
- * @version 2011-12-06, 23:48
+ * 
  */
 public class MITLicenseTest {
-    private MockClaimReporter reporter;
-    private Document subject;
+	private Document subject;
 
-    /**
-     * To ease testing provide a map with a given license version and the string to test for.
-     */
-    private static Map<IHeaderMatcher, String> licenseStringMap;
+	/**
+	 * To ease testing provide a map with a given license version and the string
+	 * to test for.
+	 */
+	private static Map<IHeaderMatcher, String> licenseStringMap;
 
-    /**
-     * If you replace this with BeforeClass and make this method static the build fails at line 71.
-     */
-    @Before
-    public void initLicencesUnderTest() {
-        licenseStringMap = new HashMap<IHeaderMatcher, String>();
-        licenseStringMap.put(new MITLicense(),
-                             MITLicense.FIRST_LICENSE_LINE
-                             + "\n" + MITLicense.MIDDLE_LICENSE_LINE
-                             + "\r\n * " + MITLicense.AS_IS_LICENSE_LINE);
-        assertEquals(1, licenseStringMap.entrySet().size());
-    }
+	/**
+	 * If you replace this with BeforeClass and make this method static the
+	 * build fails at line 71.
+	 */
+	@Before
+	public void initLicencesUnderTest() {
+		licenseStringMap = new HashMap<IHeaderMatcher, String>();
+		licenseStringMap.put(new MITLicense(), MITLicense.FIRST_LICENSE_LINE
+				+ "\n" + MITLicense.MIDDLE_LICENSE_LINE + "\r\n * "
+				+ MITLicense.AS_IS_LICENSE_LINE);
+		this.subject = new MockLocation("subject");
+	}
 
+	@Test
+	public void testNegativeMatchMITLicense() {
+		for (Map.Entry<IHeaderMatcher, String> licenceUnderTest : licenseStringMap
+				.entrySet()) {
+			assertFalse(
+					"Error match MITLicense",
+					licenceUnderTest.getKey().match(subject,
+							"'Behold, Telemachus! (nor fear the sight,)"));
+		}
+	}
 
-    @Before
-    public final void initReporter() {
-        this.reporter = new MockClaimReporter();
-        this.subject = new MockLocation("subject");
-    }
-
-    @Test
-    public void testNegativeMatches() throws Exception {
-        for(Map.Entry<IHeaderMatcher, String> licenceUnderTest : licenseStringMap.entrySet()) {
-            assertFalse(licenceUnderTest.getKey().match(subject, "'Behold, Telemachus! (nor fear the sight,)"));
-        }
-    }
-
-    @Test
-    public void testPositiveMatchInDocument() throws Exception {
-        for(Map.Entry<IHeaderMatcher, String> licenceUnderTest : licenseStringMap.entrySet()) {
-            assertTrue(licenceUnderTest.getKey().match(subject, "\t" + licenceUnderTest.getValue()));
-            assertTrue(licenceUnderTest.getKey().match(subject, "     " + licenceUnderTest.getValue()));
-            assertTrue(licenceUnderTest.getKey().match(subject, licenceUnderTest.getValue()));
-            assertTrue(licenceUnderTest.getKey().match(subject, " * " + licenceUnderTest.getValue()));
-            assertTrue(licenceUnderTest.getKey().match(subject, " // " + licenceUnderTest.getValue()));
-            assertTrue(licenceUnderTest.getKey().match(subject, " /* " + licenceUnderTest.getValue()));
-            assertTrue(licenceUnderTest.getKey().match(subject, " /** " + licenceUnderTest.getValue()));
-            assertTrue(licenceUnderTest.getKey().match(subject, "    " + licenceUnderTest.getValue()));
-            assertTrue(licenceUnderTest.getKey().match(subject, " ## " + licenceUnderTest.getValue()));
-            assertTrue(licenceUnderTest.getKey().match(subject, " ## " + licenceUnderTest.getValue() + " ##"));
-        }
-    }
+	@Test
+	public void testPositiveMatchMITLicense() {
+		for (Map.Entry<IHeaderMatcher, String> licenceUnderTest : licenseStringMap
+				.entrySet()) {
+			assertTrue(
+					"Not match MITLicense",
+					licenceUnderTest.getKey().match(subject,
+							"\t" + licenceUnderTest.getValue()));
+		}
+	}
 
 }
