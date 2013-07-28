@@ -24,27 +24,20 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-public class LicenseFamilyFactoryTest {
+public class RatLicenseFamilyTest {
 
     @Test
     public void testW3CLicenseFamilyCategory() {
-        final LicenseFamily family = LicenseFamilyFactory.w3c();
-        assertThat(family.getCategory(),
-                is(W3C
-                        .getCategory()));
+        assertThat(W3C.getCategory(), is("W3C  "));
     }
 
     @Test
     public void testW3CLicenseFamilyName() {
-        final LicenseFamily family = LicenseFamilyFactory.w3c();
-        assertThat(
-                family.getName(),
-                is(W3C.getName()));
+        assertThat(W3C.getName(), is("W3C Software Copyright"));
     }
 
     @Test
     public void testW3CLicenseFamilyNotes() {
-        final LicenseFamily family = LicenseFamilyFactory.w3c();
-        assertThat(family.getNotes(), is(""));
+        assertThat(W3C.getNotes(), is(""));
     }
 }
