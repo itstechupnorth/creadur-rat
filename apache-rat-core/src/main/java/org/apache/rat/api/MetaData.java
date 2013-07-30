@@ -71,8 +71,6 @@ public class MetaData {
             "OASIS";
     public static final String RAT_LICENSE_FAMILY_CATEGORY_VALUE_DOJO = "DOJO ";
     public static final String RAT_LICENSE_FAMILY_CATEGORY_VALUE_TMF = "TMF  ";
-    public static final String RAT_LICENSE_FAMILY_CATEGORY_VALUE_GPL1 = "GPL1 ";
-    public static final String RAT_LICENSE_FAMILY_CATEGORY_VALUE_GPL2 = "GPL2 ";
     public static final String RAT_LICENSE_FAMILY_CATEGORY_VALUE_GPL3 = "GPL3 ";
     public static final String RAT_LICENSE_FAMILY_CATEGORY_VALUE_MIT = "MIT  ";
     public static final String RAT_LICENSE_FAMILY_CATEGORY_VALUE_CDDL1 =
@@ -93,9 +91,6 @@ public class MetaData {
     public static final Datum RAT_LICENSE_FAMILY_CATEGORY_DATUM_TMF =
             new Datum(RAT_URL_LICENSE_FAMILY_CATEGORY,
                     RAT_LICENSE_FAMILY_CATEGORY_VALUE_TMF);
-    public static final Datum RAT_LICENSE_FAMILY_CATEGORY_DATUM_GPL2 =
-            new Datum(RAT_URL_LICENSE_FAMILY_CATEGORY,
-                    RAT_LICENSE_FAMILY_CATEGORY_VALUE_GPL2);
     public static final Datum RAT_LICENSE_FAMILY_CATEGORY_DATUM_GPL3 =
             new Datum(RAT_URL_LICENSE_FAMILY_CATEGORY,
                     RAT_LICENSE_FAMILY_CATEGORY_VALUE_GPL3);
@@ -113,8 +108,6 @@ public class MetaData {
             "OASIS Open License";
     public static final String RAT_LICENSE_FAMILY_NAME_VALUE_MODIFIED_BSD_LICENSE =
             "Modified BSD License";
-    public static final String RAT_LICENSE_FAMILY_NAME_VALUE_GPL_VERSION_2 =
-            "GNU General Public License, version 2";
     public static final String RAT_LICENSE_FAMILY_NAME_VALUE_GPL_VERSION_3 =
             "GNU General Public License, version 3";
     public static final String RAT_LICENSE_FAMILY_NAME_VALUE_MIT =
@@ -130,9 +123,6 @@ public class MetaData {
     public static final Datum RAT_LICENSE_FAMILY_NAME_DATUM_MODIFIED_BSD_LICENSE =
             new Datum(RAT_URL_LICENSE_FAMILY_NAME,
                     RAT_LICENSE_FAMILY_NAME_VALUE_MODIFIED_BSD_LICENSE);
-    public static final Datum RAT_LICENSE_FAMILY_NAME_DATUM_GPL_VERSION_2 =
-            new Datum(RAT_URL_LICENSE_FAMILY_NAME,
-                    RAT_LICENSE_FAMILY_CATEGORY_VALUE_GPL2);
     public static final Datum RAT_LICENSE_FAMILY_NAME_DATUM_GPL_VERSION_3 =
             new Datum(RAT_URL_LICENSE_FAMILY_NAME,
                     RAT_LICENSE_FAMILY_NAME_VALUE_GPL_VERSION_3);
