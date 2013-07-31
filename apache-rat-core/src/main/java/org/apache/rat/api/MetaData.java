@@ -71,7 +71,6 @@ public class MetaData {
             "OASIS";
     public static final String RAT_LICENSE_FAMILY_CATEGORY_VALUE_DOJO = "DOJO ";
     public static final String RAT_LICENSE_FAMILY_CATEGORY_VALUE_TMF = "TMF  ";
-    public static final String RAT_LICENSE_FAMILY_CATEGORY_VALUE_MIT = "MIT  ";
     public static final String RAT_LICENSE_FAMILY_CATEGORY_VALUE_CDDL1 =
             "CDDL1";
 
@@ -90,9 +89,6 @@ public class MetaData {
     public static final Datum RAT_LICENSE_FAMILY_CATEGORY_DATUM_TMF =
             new Datum(RAT_URL_LICENSE_FAMILY_CATEGORY,
                     RAT_LICENSE_FAMILY_CATEGORY_VALUE_TMF);
-    public static final Datum RAT_LICENSE_FAMILY_CATEGORY_DATUM_MIT =
-            new Datum(RAT_URL_LICENSE_FAMILY_CATEGORY,
-                    RAT_LICENSE_FAMILY_CATEGORY_VALUE_MIT);
     public static final Datum RAT_LICENSE_FAMILY_CATEGORY_DATUM_CDLL1 =
             new Datum(RAT_URL_LICENSE_FAMILY_CATEGORY,
                     RAT_LICENSE_FAMILY_CATEGORY_VALUE_CDDL1);
@@ -104,8 +100,6 @@ public class MetaData {
             "OASIS Open License";
     public static final String RAT_LICENSE_FAMILY_NAME_VALUE_MODIFIED_BSD_LICENSE =
             "Modified BSD License";
-    public static final String RAT_LICENSE_FAMILY_NAME_VALUE_MIT =
-            "The MIT License";
     public static final String RAT_LICENSE_FAMILY_NAME_VALUE_CDDL1 =
             "COMMON DEVELOPMENT AND DISTRIBUTION LICENSE Version 1.0";
     public static final String RAT_LICENSE_FAMILY_NAME_VALUE_ACADEMIC_FREE_LICENSE_VERSION_2_1 =
@@ -117,8 +111,6 @@ public class MetaData {
     public static final Datum RAT_LICENSE_FAMILY_NAME_DATUM_MODIFIED_BSD_LICENSE =
             new Datum(RAT_URL_LICENSE_FAMILY_NAME,
                     RAT_LICENSE_FAMILY_NAME_VALUE_MODIFIED_BSD_LICENSE);
-    public static final Datum RAT_LICENSE_FAMILY_NAME_DATUM_MIT = new Datum(
-            RAT_URL_LICENSE_FAMILY_NAME, RAT_LICENSE_FAMILY_NAME_VALUE_MIT);
     public static final Datum RAT_LICENSE_FAMILY_NAME_DATUM_CDDL1 = new Datum(
             RAT_URL_LICENSE_FAMILY_NAME, RAT_LICENSE_FAMILY_NAME_VALUE_CDDL1);
     public static final Datum RAT_LICENSE_FAMILY_NAME_DATUM_ACADEMIC_FREE_LICENSE_VERSION_2_1 =
