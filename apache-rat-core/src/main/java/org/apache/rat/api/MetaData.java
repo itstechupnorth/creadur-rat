@@ -67,7 +67,6 @@ public class MetaData {
     public static final String RAT_LICENSE_FAMILY_CATEGORY_VALUE_GEN = "GEN  ";
     public static final String RAT_LICENSE_FAMILY_CATEGORY_VALUE_UNKNOWN =
             "?????";
-    public static final String RAT_LICENSE_FAMILY_CATEGORY_VALUE_DOJO = "DOJO ";
 
     public static final Datum RAT_LICENSE_FAMILY_CATEGORY_DATUM_GEN =
             new Datum(RAT_URL_LICENSE_FAMILY_CATEGORY,
@@ -75,20 +74,13 @@ public class MetaData {
     public static final Datum RAT_LICENSE_FAMILY_CATEGORY_DATUM_UNKNOWN =
             new Datum(RAT_URL_LICENSE_FAMILY_CATEGORY,
                     RAT_LICENSE_FAMILY_CATEGORY_VALUE_UNKNOWN);
-    public static final Datum RAT_LICENSE_FAMILY_CATEGORY_DATUM_DOJO =
-            new Datum(RAT_URL_LICENSE_FAMILY_CATEGORY,
-                    RAT_LICENSE_FAMILY_CATEGORY_VALUE_DOJO);
 
     // License Family Standard Names
     public static final String RAT_URL_LICENSE_FAMILY_NAME = RAT_BASE_URL
             + "#LicenseFamilyName";
-	public static final String RAT_LICENSE_FAMILY_NAME_VALUE_MODIFIED_BSD_LICENSE = "Modified BSD License";
     public static final String RAT_LICENSE_FAMILY_NAME_VALUE_ACADEMIC_FREE_LICENSE_VERSION_2_1 =
             "Academic Free License, Version 2.1";
     public static final String RAT_LICENSE_FAMILY_NAME_VALUE_UNKNOWN = "?????";
-	public static final Datum RAT_LICENSE_FAMILY_NAME_DATUM_MODIFIED_BSD_LICENSE = new Datum(
-			RAT_URL_LICENSE_FAMILY_NAME,
-			RAT_LICENSE_FAMILY_NAME_VALUE_MODIFIED_BSD_LICENSE);
     public static final Datum RAT_LICENSE_FAMILY_NAME_DATUM_ACADEMIC_FREE_LICENSE_VERSION_2_1 =
             new Datum(RAT_URL_LICENSE_FAMILY_NAME,
                     RAT_LICENSE_FAMILY_NAME_VALUE_ACADEMIC_FREE_LICENSE_VERSION_2_1);
