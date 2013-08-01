@@ -20,33 +20,55 @@ package org.apache.rat.analysis.license;
 
 import static org.apache.rat.api.domain.LicenseFamilyBuilder.aLicenseFamily;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
+/**
+ * The Class SimplePatternBasedLicenseTest.
+ */
 public class SimplePatternBasedLicenseTest {
+
+	/**
+	 * Test license family constructor sets notes.
+	 */
     @Test
     public void testLicenseFamilyConstructorSetsNotes() {
-        final String someNotes = "Some notes about a license family";
+		String someNotes = "Some notes about a license family";
         assertThat(
                 new SimplePatternBasedLicense(aLicenseFamily().withNotes(
                         someNotes).build()).getNotes(), is(someNotes));
     }
 
+	/**
+	 * Test license family constructor sets category.
+	 */
     @Test
     public void testLicenseFamilyConstructorSetsCategory() {
-        final String someCategory = "http://some.category.org";
+		String someCategory = "http://some.category.org";
         assertThat(
                 new SimplePatternBasedLicense(aLicenseFamily().withCategory(
                         someCategory).build()).getLicenseFamilyCategory(),
                 is(someCategory));
     }
 
+	/**
+	 * Test license family constructor sets name.
+	 */
     @Test
     public void testLicenseFamilyConstructorSetsName() {
-        final String someName = "http://some.name.org";
+		String someName = "http://some.name.org";
         assertThat(
                 new SimplePatternBasedLicense(aLicenseFamily().withName(
                         someName).build()).getLicenseFamilyName(), is(someName));
     }
+
+	/**
+	 * Test license family constructor default.
+	 */
+	@Test
+	public void testLicenseFamilyConstructorDefault() {
+		assertNotNull("Not null Object", new SimplePatternBasedLicense());
+	}
 }

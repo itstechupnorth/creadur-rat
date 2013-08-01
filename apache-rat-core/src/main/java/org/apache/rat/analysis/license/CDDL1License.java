@@ -18,31 +18,41 @@
  */
 package org.apache.rat.analysis.license;
 
+import static org.apache.rat.api.domain.RatLicenseFamily.CDDL1;
+
 import java.util.regex.Pattern;
+
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.rat.api.MetaData;
 
 /**
  * Base CDDL 1.0 license.
  */
 public class CDDL1License extends SimplePatternBasedLicense {
 
+	/** The Constant LICENSE_LINE. */
     public static final String LICENSE_LINE =
             "The contents of this file are subject to the terms of the Common Development[\\\\r\\\\n\\\\s]+"
             + "and Distribution License(\"CDDL\") (the \"License\"). You may not use this file[\\\\r\\\\n\\\\s]+"
             + "except in compliance with the License.";
 
+	/** The Constant LICENSE_URL. */
     public static final String LICENSE_URL =
             ".*https://oss.oracle.com/licenses/CDDL.*";
 
+	/**
+	 * Instantiates a new cDD l1 license.
+	 */
     public CDDL1License() {
-        super(MetaData.RAT_LICENSE_FAMILY_CATEGORY_DATUM_CDLL1,
-                MetaData.RAT_LICENSE_FAMILY_NAME_DATUM_CDDL1,
-                "", new String[]{LICENSE_LINE, LICENSE_URL});
+		super(CDDL1.licenseFamily(), new String[] { LICENSE_LINE, LICENSE_URL });
     }
 
+	/**
+	 * Gets the reg ex patterns.
+	 * 
+	 * @return the reg ex patterns
+	 */
     private Pattern[] getRegExPatterns() {
-        final Pattern[] result;
+		Pattern[] result;
         final String[] pttrns = getPatterns();
         if (ArrayUtils.isEmpty(pttrns)) {
             result = new Pattern[0];
@@ -56,18 +66,27 @@ public class CDDL1License extends SimplePatternBasedLicense {
         return result;
     }
 
-    @Override
-    protected boolean matches(final String pLine) {
-        if (pLine != null) {
-            final String[] pttrns = getPatterns();
-            if (pttrns != null) {
-                for (Pattern pttrn : getRegExPatterns()) {
-                    if (pttrn.matcher(pLine).find()) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.rat.analysis.license.SimplePatternBasedLicense#matches(java
+	 * .lang.String)
+	 */
+	@Override
+	protected boolean matches(final String pLine) {
+		boolean result = false;
+		if (pLine != null) {
+			final String[] pttrns = getPatterns();
+			if (pttrns != null) {
+				for (Pattern pttrn : getRegExPatterns()) {
+					if (pttrn.matcher(pLine).find()) {
+						result = true;
+						break;
+					}
+				}
+			}
+		}
+		return result;
     }
 }

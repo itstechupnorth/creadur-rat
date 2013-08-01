@@ -18,18 +18,19 @@
  */ 
 package org.apache.rat.analysis.license;
 
-import org.apache.rat.api.Document;
-import org.apache.rat.document.MockLocation;
-import org.apache.rat.report.claim.impl.xml.MockClaimReporter;
-import org.apache.rat.test.utils.Resources;
-import org.junit.Before;
-import org.junit.Test;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.StringReader;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.apache.rat.api.Document;
+import org.apache.rat.document.MockLocation;
+import org.junit.Before;
+import org.junit.Test;
 
 public class OASISLicenseTest {
     
@@ -53,54 +54,50 @@ public class OASISLicenseTest {
             "This document and the information contained herein is provided on an \"AS IS\" basis and OASIS DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.\n" +
             "-->\n";
     
-    OASISLicense license;
-    
-    MockClaimReporter reporter;
+	private OASISLicense license;
 
     @Before
-    public void setUp() throws Exception {
+	public void setUp() {
         license = new OASISLicense();
-        reporter = new MockClaimReporter();
     }
 
     @Test
-    public void match() throws Exception {
-        BufferedReader in = new BufferedReader(new StringReader(LICENSE));
-        String line = in.readLine();
+	public void testMatchOASISLicense() throws IOException {
+		BufferedReader bufferedReader = new BufferedReader(new StringReader(
+				LICENSE));
+		String line = bufferedReader.readLine();
         boolean result = false;
         final Document subject = new MockLocation("subject");
         while (line != null) {
             result = license.match(subject, line);
-            line = in.readLine();
+			line = bufferedReader.readLine();
         }
         assertTrue("OASIS license should be matched", result);
-        license.reset();
-        result = license.match(subject, "New line");
-        assertFalse("After reset, content should build up again", result);
     }
 
     @Test
-    public void noMatch() throws Exception {
-        BufferedReader in = Resources.getBufferedResourceReader("elements/Source.java");
-        String line = in.readLine();
-        boolean result = false;
-        final Document subject = new MockLocation("subject");
-        while (line != null) {
-            result = license.match(subject, line);
-            line = in.readLine();
-        }
-        assertFalse("OASIS license should not be matched", result);
+	public void testNonMatchOASISLicense() throws IOException {
+		final Document subject = new MockLocation("subject");
         license.reset();
+		boolean result = license.match(subject, "New line");
+		assertFalse("After reset, content should build up again", result);
     }
-    
-    @Test(timeout=2000) // may need to be adjusted if many more files are added
-    public void goodFiles() throws Exception {
-        DirectoryScanner.filesInDir("oasis/good", license, true);
-    }
-   
-    @Test(timeout=2000) // may need to be adjusted if many more files are added
-    public void baddFiles() throws Exception {
-        DirectoryScanner.filesInDir("oasis/bad", license, false);
-    }
+
+	@Test
+	public void testNotes() {
+		assertThat(
+				license.getNotes(),
+				is("Note that OASIS requires a NOTICE. All modifications require notes. See https://www.oasis-open.org/policies-guidelines/ipr."));
+	}
+
+	@Test
+	public void testCategory() {
+		assertThat(license.getLicenseFamilyCategory(), is("OASIS"));
+	}
+
+	@Test
+	public void testName() {
+		assertThat(license.getLicenseFamilyName(), is("OASIS Open License"));
+	}
    
 }

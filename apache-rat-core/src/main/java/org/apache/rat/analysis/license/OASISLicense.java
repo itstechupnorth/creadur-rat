@@ -18,10 +18,11 @@
  */ 
 package org.apache.rat.analysis.license;
 
+import static org.apache.rat.api.domain.RatLicenseFamily.OASIS;
+
 import java.util.regex.Pattern;
 
 import org.apache.rat.api.Document;
-import org.apache.rat.api.MetaData;
 
 /**
  * Looks for documents contain the OASIS copyright claim plus derivative work clause.
@@ -29,25 +30,38 @@ import org.apache.rat.api.MetaData;
  */
 public class OASISLicense extends FullTextMatchingLicense {
 
+	/** The Constant COPYRIGHT_PATTERN_DEFN. */
     private static final String COPYRIGHT_PATTERN_DEFN = ".*Copyright\\s.*OASIS Open.*";
+
+	/** The Constant CLAUSE_DEFN. */
     private static final String CLAUSE_DEFN
     = "This document and translations of it may be copied and furnished to others and derivative works" +
             "that comment on or otherwise explain it or assist in its implementation may be prepared" +
             "copied published and distributed";
     
+	/** The Constant COPYRIGHT_PATTERN. */
     private static final Pattern COPYRIGHT_PATTERN = Pattern.compile(COPYRIGHT_PATTERN_DEFN);
 
-    boolean copyrightMatch = false;
+	/** The copyright match. */
+	private boolean copyrightMatch;
     
+	/**
+	 * Instantiates a new oASIS license.
+	 */
     public OASISLicense() {
-        super(MetaData.RAT_LICENSE_FAMILY_CATEGORY_DATUM_OASIS,
-              MetaData.RAT_LICENSE_FAMILY_NAME_DATUM_OASIS_OPEN_LICENSE,
-              "No modifications allowed",
+		super(OASIS.licenseFamily(),
               CLAUSE_DEFN);
     }
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.rat.analysis.license.FullTextMatchingLicense#match(org.apache
+	 * .rat.api.Document, java.lang.String)
+	 */
     @Override
-    public boolean match(Document subject, String line) {
+	public boolean match(final Document subject, final String line) {
         boolean result = false;
         if (copyrightMatch) {
             result = super.match(subject, line);
@@ -57,6 +71,11 @@ public class OASISLicense extends FullTextMatchingLicense {
         return result;
     }
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.analysis.license.FullTextMatchingLicense#reset()
+	 */
     @Override
     public void reset() {
         copyrightMatch = false;

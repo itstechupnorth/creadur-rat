@@ -25,6 +25,42 @@ import static org.apache.rat.api.domain.LicenseFamilyBuilder.aLicenseFamily;
  */
 public enum RatLicenseFamily {
 
+	APACHE(
+			"Apache License Version 2.0",
+			"AL   ",
+			"Note that APACHE requires a NOTICE. All modifications require notes. See http://www.apache.org/licenses/LICENSE-2.0."),
+	GPL1(
+			"GNU General Public License, version 1",
+			"GPL1 ",
+			"Note that GPL1 requires a NOTICE. All modifications require notes. See http://www.gnu.org/licenses/gpl-1.0.html."),
+	GPL2(
+			"GNU General Public License, version 2",
+			"GPL2 ",
+			"Note that GPL2 requires a NOTICE. All modifications require notes. See http://www.gnu.org/licenses/gpl-2.0.html."),
+	GPL3(
+			"GNU General Public License, version 3",
+			"GPL3 ",
+			"Note that GPL3 requires a NOTICE. All modifications require notes. See http://www.gnu.org/licenses/gpl-3.0.html."),
+	MIT(
+			"The MIT License",
+			"MIT  ",
+			"Note that MIT requires a NOTICE. All modifications require notes. See http://opensource.org/licenses/MIT."),
+	CDDL1(
+			"COMMON DEVELOPMENT AND DISTRIBUTION LICENSE Version 1.0",
+			"CDDL1",
+			"Note that CDDL1 requires a NOTICE. All modifications require notes. See https://oss.oracle.com/licenses/CDDL."),
+	OASIS(
+			"OASIS Open License",
+			"OASIS",
+			"Note that OASIS requires a NOTICE. All modifications require notes. See https://www.oasis-open.org/policies-guidelines/ipr."),
+	TMF854(
+			"Modified BSD License",
+			"TMF  ",
+			"Note that TMF854 requires a NOTICE. All modifications require notes. See http://opensource.org/licenses/BSD-3-Clause."),
+	 DOJO(
+			"Modified BSD License",
+			"DOJO ",
+			"Note that DOJO requires a NOTICE. All modifications require notes. See http://dojotoolkit.org/community/licensing.shtml."),
     W3C(
             "W3C Software Copyright",
             "W3C  ",

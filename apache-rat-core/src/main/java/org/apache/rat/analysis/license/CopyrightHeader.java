@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 import org.apache.rat.analysis.IHeaderMatcher;
 import org.apache.rat.api.Document;
 import org.apache.rat.api.MetaData.Datum;
+import org.apache.rat.api.domain.LicenseFamily;
 
 /**
  * Matches a typical Copyright header line only based on a regex pattern which
@@ -61,30 +62,18 @@ public class CopyrightHeader extends BaseLicense implements IHeaderMatcher {
 	
 	/** The copyright match. */
 	private boolean copyrightMatch;
-
+	
 	/**
-	 * Instantiates a new copyright header.
-	 *
-	 * @param licenseFamilyCategory the license family category
-	 * @param licenseFamilyName the license family name
-	 * @param notes the notes
+	 * Constructs a license indicated by the given patterns.
+	 * 
+	 * @param pLicenseFamily
+	 *            not null
+	 * @param copyrightOwner
+	 *            not null
 	 */
-	protected CopyrightHeader(final Datum licenseFamilyCategory,
-			final Datum licenseFamilyName, final String notes) {
-		super(licenseFamilyCategory, licenseFamilyName, notes);
-	}
-
-	/**
-	 * Instantiates a new copyright header.
-	 *
-	 * @param licenseFamilyCategory the license family category
-	 * @param licenseFamilyName the license family name
-	 * @param notes the notes
-	 * @param copyrightOwner the copyright owner
-	 */
-	protected CopyrightHeader(final Datum licenseFamilyCategory,
-			final Datum licenseFamilyName, final String notes, final String copyrightOwner) {
-		this(licenseFamilyCategory, licenseFamilyName, notes);
+	protected CopyrightHeader(final LicenseFamily pLicenseFamily,
+			final String copyrightOwner) {
+		super(pLicenseFamily);
 		setCopyrightOwner(copyrightOwner);
 	}
 

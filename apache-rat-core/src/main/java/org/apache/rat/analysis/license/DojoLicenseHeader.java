@@ -18,10 +18,14 @@
  */ 
 package org.apache.rat.analysis.license;
 
-import org.apache.rat.api.MetaData;
+import static org.apache.rat.api.domain.RatLicenseFamily.DOJO;
 
-
+/**
+ * The Class DojoLicenseHeader.
+ */
 public class DojoLicenseHeader extends SimplePatternBasedLicense {
+
+	/** The Constant LICENSE_URL. */
     private static final String LICENSE_URL  = "http://dojotoolkit.org/community/licensing.shtml";
     
     //  Copyright (c) 2004-2006, The Dojo Foundation
@@ -32,10 +36,11 @@ public class DojoLicenseHeader extends SimplePatternBasedLicense {
     //
     //    http://dojotoolkit.org/community/licensing.shtml
 
+	/**
+	 * Instantiates a new dojo license header.
+	 */
     public DojoLicenseHeader() {
-        // TODO: support for dual licensing
-        // TODO: support for or higher clauses
-        super(MetaData.RAT_LICENSE_FAMILY_CATEGORY_DATUM_DOJO, MetaData.RAT_LICENSE_FAMILY_NAME_DATUM_MODIFIED_BSD_LICENSE, "Dual license AFL/BSD",
+		super(DOJO.licenseFamily(),
                 new String[]{LICENSE_URL});
     }
 }
