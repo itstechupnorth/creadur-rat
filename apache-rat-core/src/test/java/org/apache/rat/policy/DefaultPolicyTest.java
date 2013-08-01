@@ -18,35 +18,36 @@
  */ 
 package org.apache.rat.policy;
 
-import org.apache.rat.api.Document;
-import org.apache.rat.api.MetaData;
-import org.apache.rat.api.MetaData.Datum;
-import org.apache.rat.document.MockLocation;
-import org.apache.rat.report.claim.impl.xml.MockClaimReporter;
-import org.junit.Before;
-import org.junit.Test;
-
+import static org.apache.rat.api.domain.RatLicenseFamily.APACHE;
+import static org.apache.rat.api.domain.RatLicenseFamily.MIT;
+import static org.apache.rat.api.domain.RatLicenseFamily.OASIS;
 import static org.apache.rat.api.domain.RatLicenseFamily.W3C;
 import static org.apache.rat.api.domain.RatLicenseFamily.W3C_DOCUMENTATION;
 import static org.junit.Assert.assertEquals;
 
+import org.apache.rat.api.Document;
+import org.apache.rat.api.MetaData;
+import org.apache.rat.document.MockLocation;
+import org.junit.Before;
+import org.junit.Test;
+
 
 public class DefaultPolicyTest {
 
-    MockClaimReporter reporter;
     DefaultPolicy policy;
     private Document subject;
 
     @Before
     public void setUp() throws Exception {
-        reporter = new MockClaimReporter();
         policy = new DefaultPolicy();
         subject = new MockLocation("subject");
     }
 
     @Test
     public void testALFamily() throws Exception {
-        subject.getMetaData().set(MetaData.RAT_LICENSE_FAMILY_NAME_DATUM_APACHE_LICENSE_VERSION_2_0);
+		subject.getMetaData().set(
+				new MetaData.Datum(MetaData.RAT_URL_LICENSE_FAMILY_NAME, APACHE
+						.getName()));
         policy.analyse(subject);
         assertApproval(true);
     }
@@ -56,12 +57,14 @@ public class DefaultPolicyTest {
         assertEquals(pApproved, MetaData.RAT_APPROVED_LICENSE_VALUE_TRUE.equals(subject.getMetaData().value(MetaData.RAT_URL_APPROVED_LICENSE)));
     }
 
-    @Test
-    public void testOASISFamily() throws Exception {
-        subject.getMetaData().set(MetaData.RAT_LICENSE_FAMILY_NAME_DATUM_OASIS_OPEN_LICENSE);
-        policy.analyse(subject);
-        assertApproval(true);
-    }
+	@Test
+	public void testOASISFamily() throws Exception {
+		subject.getMetaData().set(
+				new MetaData.Datum(MetaData.RAT_URL_LICENSE_FAMILY_NAME, OASIS
+						.getName()));
+		policy.analyse(subject);
+		assertApproval(true);
+	}
     
     @Test
     public void testW3CFamily() throws Exception {
@@ -77,7 +80,16 @@ public class DefaultPolicyTest {
         assertApproval(true);
     }
     
-    @Test
+	@Test
+	public void testMITFamily() throws Exception {
+		subject.getMetaData().set(
+				new MetaData.Datum(MetaData.RAT_URL_LICENSE_FAMILY_NAME, MIT
+						.getName()));
+		policy.analyse(subject);
+		assertApproval(true);
+	}
+
+	@Test
     public void testUnknownFamily() throws Exception {
         subject.getMetaData().set(MetaData.RAT_LICENSE_FAMILY_NAME_DATUM_UNKNOWN);
         policy.analyse(subject);

@@ -18,19 +18,24 @@
  */
 package org.apache.rat.analysis.license;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.rat.analysis.IHeaderMatcher;
+import org.apache.rat.analysis.license.CDDL1License;
 import org.apache.rat.api.Document;
 import org.apache.rat.document.MockLocation;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
+/**
+ * 
+ */
 public class CDDL1LicenseTest {
 
     private static final String LICENSE_LINE =
@@ -49,12 +54,16 @@ public class CDDL1LicenseTest {
     private static Map<IHeaderMatcher, String> licenseStringMap;
 
     private Document subject;
-
+    
+    /**
+	 * Inits the licences under test.
+	 */
     @BeforeClass
     public static void initLicencesUnderTest() {
         licenseStringMap = new HashMap<IHeaderMatcher, String>();
         licenseStringMap.put(new CDDL1License(), LICENSE_LINE);
-        assertEquals(1, licenseStringMap.entrySet().size());
+        assertEquals("Must be One element", 1, licenseStringMap.entrySet()
+				.size());
     }
 
     @Before
@@ -63,25 +72,48 @@ public class CDDL1LicenseTest {
     }
 
     @Test
-    public void testNegativeMatches() throws Exception {
-        for (Map.Entry<IHeaderMatcher, String> licenceUnderTest : licenseStringMap.entrySet()) {
-            assertFalse(licenceUnderTest.getKey().match(subject, "'Behold, Telemachus! (nor fear the sight,)"));
-        }
+    public void testNegativeMatchCDDL1License() throws Exception {
+    	for (Map.Entry<IHeaderMatcher, String> licenceUnderTest : licenseStringMap
+				.entrySet()) {
+			assertFalse(
+					"Not Matches the  CDDL1 License",
+					licenceUnderTest.getKey().match(subject,
+							"'Behold, Telemachus! (nor fear the sight,)"));
+		}
     }
+    
+	@Test
+	public void testNegativeMatchCDDL1LicenseEmptyPattern() throws Exception {
+		CDDL1License licenseCDDL1 = new CDDL1License();
+		licenseCDDL1.setPatterns(new String[0]);
+		assertFalse("Not Matches the  CDDL1 License", licenseCDDL1.match(
+				subject, "'Behold, Telemachus! (nor fear the sight,)"));
+	}
 
     @Test
-    public void testPositiveMatchInDocument() throws Exception {
-        for (Map.Entry<IHeaderMatcher, String> licenceUnderTest : licenseStringMap.entrySet()) {
-            assertTrue(licenceUnderTest.getKey().match(subject, "\t" + licenceUnderTest.getValue()));
-            assertTrue(licenceUnderTest.getKey().match(subject, "     " + licenceUnderTest.getValue()));
-            assertTrue(licenceUnderTest.getKey().match(subject, licenceUnderTest.getValue()));
-            assertTrue(licenceUnderTest.getKey().match(subject, " * " + licenceUnderTest.getValue()));
-            assertTrue(licenceUnderTest.getKey().match(subject, " // " + licenceUnderTest.getValue()));
-            assertTrue(licenceUnderTest.getKey().match(subject, " /* " + licenceUnderTest.getValue()));
-            assertTrue(licenceUnderTest.getKey().match(subject, " /** " + licenceUnderTest.getValue()));
-            assertTrue(licenceUnderTest.getKey().match(subject, "    " + licenceUnderTest.getValue()));
-            assertTrue(licenceUnderTest.getKey().match(subject, " ## " + licenceUnderTest.getValue()));
-            assertTrue(licenceUnderTest.getKey().match(subject, " ## " + licenceUnderTest.getValue() + " ##"));
+    public void testPositiveMatchCDDL1License() throws Exception {
+    	for (Map.Entry<IHeaderMatcher, String> licenceUnderTest : licenseStringMap.entrySet()) {
+			assertTrue("Not Matches the  CDDL1 License", licenceUnderTest
+					.getKey()
+					.match(subject, "\t" + licenceUnderTest.getValue()));
         }
     }
+    
+	@Test
+	public void testNotes() {
+		assertThat(
+				new CDDL1License().getNotes(),
+				is("Note that CDDL1 requires a NOTICE. All modifications require notes. See https://oss.oracle.com/licenses/CDDL."));
+	}
+
+	@Test
+	public void testCategory() {
+		assertThat(new CDDL1License().getLicenseFamilyCategory(), is("CDDL1"));
+	}
+
+	@Test
+	public void testName() {
+		assertThat(new CDDL1License().getLicenseFamilyName(),
+				is("COMMON DEVELOPMENT AND DISTRIBUTION LICENSE Version 1.0"));
+	}
 }
