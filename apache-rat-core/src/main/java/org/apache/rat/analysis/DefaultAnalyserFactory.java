@@ -24,11 +24,25 @@ import org.apache.rat.document.IDocumentAnalyser;
  * Creates default analysers.
  * 
  */
-public class DefaultAnalyserFactory {
+public final class DefaultAnalyserFactory {
 
-    public static final IDocumentAnalyser createDefaultAnalyser(
-            final IHeaderMatcher matcher) {
+	/**
+	 * Instantiates a new default analyser factory.
+	 */
+	public DefaultAnalyserFactory() {
+		super();
+	}
 
-        return new DefaultAnalyser(matcher);
-    }
+	/**
+	 * Creates a new DefaultAnalyser object.
+	 * 
+	 * @param matcher
+	 *            the matcher
+	 * @return the i document analyser
+	 */
+	public static IDocumentAnalyser createDefaultAnalyser(
+			final IHeaderMatcher matcher) {
+
+		return new DefaultAnalyser(matcher);
+	}
 }

@@ -30,176 +30,295 @@ import java.nio.charset.CodingErrorAction;
 import org.apache.rat.api.Document;
 
 /**
- * TODO: factor into MIME guesser and MIME->binary guesser
+ * The Class BinaryGuesser.
  */
 public class BinaryGuesser {
 
-    private static final String[] DATA_EXTENSIONS = { "DAT", "DOC", "NCB",
-            "IDB", "SUO", "XCF", "RAJ", "CERT", "KS", "TS", "ODP", };
-    private static final String[] EXE_EXTENSIONS = { "EXE", "DLL", "LIB", "SO",
-            "A", "EXP", };
-    private static final String[] KEYSTORE_EXTENSIONS = { "JKS", "KEYSTORE",
-            "PEM", "CRL" };
-    private static final String[] IMAGE_EXTENSIONS = { "PNG", "PDF", "GIF",
-            "GIFF", "TIF", "TIFF", "JPG", "JPEG", "ICO", "ICNS", };
-    private static final String[] BYTECODE_EXTENSIONS = { "CLASS", "PYD",
-            "OBJ", "PYC", };
+	/** The Constant DATA_EXTENSIONS. */
+	private static final String[] DATA_EXTENSIONS = { "DAT", "DOC", "NCB",
+			"IDB", "SUO", "XCF", "RAJ", "CERT", "KS", "TS", "ODP", };
 
-    private static final String JAR_MANIFEST = "MANIFEST.MF";
-    private static final String JAVA = "JAVA";
-    private static final int HIGH_BYTES_RATIO = 100;
-    private static final int TOTAL_READ_RATIO = 30;
-    private static final int NON_ASCII_THREASHOLD = 256;
-    private static final int ASCII_CHAR_THREASHOLD = 8;
+	/** The Constant EXE_EXTENSIONS. */
+	private static final String[] EXE_EXTENSIONS = { "EXE", "DLL", "LIB", "SO",
+			"A", "EXP", };
 
-    public BinaryGuesser() {
-    }
+	/** The Constant KEYSTORE_EXTENSIONS. */
+	private static final String[] KEYSTORE_EXTENSIONS = { "JKS", "KEYSTORE",
+			"PEM", "CRL" };
 
-    public boolean matches(final Document document) {
-        // TODO: reimplement the binary test algorithm?
-        // TODO: more efficient to move into standard analysis
-        // TODO: then use binary as default
-        return isBinary(document.getName()) ||
-        // try a taste
-                isBinaryDocument(document);
-    }
+	/** The Constant IMAGE_EXTENSIONS. */
+	private static final String[] IMAGE_EXTENSIONS = { "PNG", "PDF", "GIF",
+			"GIFF", "TIF", "TIFF", "JPG", "JPEG", "ICO", "ICNS", };
 
-    private boolean isBinaryDocument(final Document document) {
-        boolean result = false;
-        InputStream stream = null;
-        try {
-            stream = document.inputStream();
-            result = isBinary(stream);
-        } catch (final IOException e) {
-            result = false;
-        } finally {
-            try {
-                if (stream != null) {
-                    stream.close();
-                }
-            } catch (final IOException e) {
-                // SWALLOW
-            }
-        }
-        return result;
-    }
+	/** The Constant BYTECODE_EXTENSIONS. */
+	private static final String[] BYTECODE_EXTENSIONS = { "CLASS", "PYD",
+			"OBJ", "PYC", };
 
-    private boolean isBinary(final CharSequence taste) {
-        int highBytes = 0;
-        final int length = taste.length();
-        for (int i = 0; i < length; i++) {
-            final char c = taste.charAt(i);
-            if (c > BinaryGuesser.NON_ASCII_THREASHOLD
-                    || c <= BinaryGuesser.ASCII_CHAR_THREASHOLD) {
-                highBytes++;
-            }
-        }
-        return highBytes * BinaryGuesser.HIGH_BYTES_RATIO > length
-                * BinaryGuesser.TOTAL_READ_RATIO;
-    }
+	/** The Constant JAR_MANIFEST. */
+	private static final String JAR_MANIFEST = "MANIFEST.MF";
 
-    /**
-     * Do the first few bytes of the stream hint at a binary file?
-     * 
-     * <p>
-     * Any IOException is swallowed internally and the test returns false.
-     * </p>
-     * 
-     * <p>
-     * This method will try to read bytes from the stream and translate them to
-     * characters according to the platform's default encoding. If any bytes can
-     * not be translated to characters it will assume the original data must be
-     * binary and return true.
-     * </p>
-     */
-    private boolean isBinary(final InputStream in) {
-        try {
-            final byte[] taste = new byte[200];
-            final int bytesRead = in.read(taste);
-            if (bytesRead > 0) {
-                final ByteBuffer bytes = ByteBuffer.wrap(taste, 0, bytesRead);
-                CharBuffer chars = CharBuffer.allocate(2 * bytesRead);
-                final Charset cs =
-                        Charset.forName(System.getProperty("file.encoding"));
-                final CharsetDecoder cd =
-                        cs.newDecoder()
-                                .onMalformedInput(CodingErrorAction.REPORT)
-                                .onUnmappableCharacter(CodingErrorAction.REPORT);
-                while (bytes.remaining() > 0) {
-                    final CoderResult res = cd.decode(bytes, chars, true);
-                    if (res.isMalformed() || res.isUnmappable()) {
-                        return true;
-                    } else if (res.isOverflow()) {
-                        chars.limit(chars.position());
-                        chars.rewind();
-                        final int c = chars.capacity() * 2;
-                        final CharBuffer on = CharBuffer.allocate(c);
-                        on.put(chars);
-                        chars = on;
-                    }
-                }
-                chars.limit(chars.position());
-                chars.rewind();
-                return isBinary(chars);
-            }
-        } catch (final IOException e) {
-            // SWALLOW
-        }
-        return false;
-    }
+	/** The Constant JAVA. */
+	private static final String JAVA = "JAVA";
 
-    private boolean isBinaryData(final String name) {
-        return extensionMatches(name, DATA_EXTENSIONS);
-    }
+	/** The Constant HIGH_BYTES_RATIO. */
+	private static final int HIGH_BYTES_RATIO = 100;
 
-    private boolean isExecutable(final String name) {
-        return name.equals(BinaryGuesser.JAVA)
-                || extensionMatches(name, EXE_EXTENSIONS)
-                || containsExtension(name, EXE_EXTENSIONS);
-    }
+	/** The Constant TOTAL_READ_RATIO. */
+	private static final int TOTAL_READ_RATIO = 30;
 
-    private boolean containsExtension(final String name, final String[] exts) {
-        for (final String ext : exts) {
-            if (name.indexOf("." + ext + ".") >= 0) {
-                return true;
-            }
-        }
-        return false;
-    }
+	/** The Constant NON_ASCII_THREASHOLD. */
+	private static final int NON_ASCII_THREASHOLD = 256;
 
-    private boolean extensionMatches(final String name, final String[] exts) {
-        for (final String ext : exts) {
-            if (name.endsWith("." + ext)) {
-                return true;
-            }
-        }
-        return false;
-    }
+	/** The Constant ASCII_CHAR_THREASHOLD. */
+	private static final int ASCII_CHAR_THREASHOLD = 8;
 
-    private boolean isBytecode(final String name) {
-        return extensionMatches(name, BYTECODE_EXTENSIONS);
-    }
+	private static final int ZERO = 0;
 
-    private boolean isImage(final String name) {
-        return extensionMatches(name, IMAGE_EXTENSIONS);
-    }
+	/**
+	 * Instantiates a new binary guesser.
+	 */
+	public BinaryGuesser() {
+		super();
+	}
 
-    private boolean isKeystore(final String name) {
-        return extensionMatches(name, KEYSTORE_EXTENSIONS);
-    }
+	/**
+	 * Matches.
+	 * 
+	 * @param document
+	 *            the document
+	 * @return true, if successful
+	 */
+	public boolean matches(final Document document) {
+		return isBinary(document.getName()) ||
+		// try a taste
+				isBinaryDocument(document);
+	}
 
-    /**
-     * Is a file by that name a known binary file?
-     */
-    private boolean isBinary(final String name) {
-        if (name == null) {
-            return false;
-        }
-        final String normalisedName = GuessUtils.normalise(name);
-        return BinaryGuesser.JAR_MANIFEST.equals(name)
-                || isImage(normalisedName) || isKeystore(normalisedName)
-                || isBytecode(normalisedName) || isBinaryData(normalisedName)
-                || isExecutable(normalisedName);
-    }
+	/**
+	 * Checks if is binary document.
+	 * 
+	 * @param document
+	 *            the document
+	 * @return true, if is binary document
+	 */
+	private boolean isBinaryDocument(final Document document) {
+		boolean result = false;
+		InputStream stream = null;
+		try {
+			stream = document.inputStream();
+			result = isBinary(stream);
+		} catch (final IOException e) {
+			result = false;
+		} finally {
+			if (stream != null) {
+				try {
+					stream.close();
+				} catch (IOException e) {
+					// Not change anything because it´s problem after work with
+					// the file.
+				}
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Checks if is binary.
+	 * 
+	 * @param taste
+	 *            the taste
+	 * @return true, if is binary
+	 */
+	private boolean isBinary(final CharSequence taste) {
+		int highBytes = 0;
+		final int length = taste.length();
+		for (int i = 0; i < length; i++) {
+			final char value = taste.charAt(i);
+			if (value > BinaryGuesser.NON_ASCII_THREASHOLD
+					|| value <= BinaryGuesser.ASCII_CHAR_THREASHOLD) {
+				highBytes++;
+			}
+		}
+		return highBytes * BinaryGuesser.HIGH_BYTES_RATIO > length
+				* BinaryGuesser.TOTAL_READ_RATIO;
+	}
+
+	/**
+	 * Do the first few bytes of the stream hint at a binary file?
+	 * 
+	 * <p>
+	 * Any IOException is swallowed internally and the test returns false.
+	 * </p>
+	 * 
+	 * <p>
+	 * This method will try to read bytes from the stream and translate them to
+	 * characters according to the platform's default encoding. If any bytes can
+	 * not be translated to characters it will assume the original data must be
+	 * binary and return true.
+	 * </p>
+	 * 
+	 * @param in
+	 *            the in
+	 * @return true, if is binary
+	 */
+	private boolean isBinary(final InputStream inputStream) {
+		boolean result = false;
+		try {
+			final byte[] taste = new byte[200];
+			final int bytesRead = inputStream.read(taste);
+			if (bytesRead > ZERO) {
+				final ByteBuffer bytes = ByteBuffer.wrap(taste, 0, bytesRead);
+				CharBuffer chars = CharBuffer.allocate(2 * bytesRead);
+				final Charset charset = Charset.forName(System
+						.getProperty("file.encoding"));
+				final CharsetDecoder charsetDecoder = charset.newDecoder()
+						.onMalformedInput(CodingErrorAction.REPORT)
+						.onUnmappableCharacter(CodingErrorAction.REPORT);
+				boolean goOn = true;
+				while (bytes.remaining() > 0) {
+					final CoderResult res = charsetDecoder.decode(bytes, chars,
+							true);
+					if (res.isMalformed() || res.isUnmappable()) {
+						result = true;
+						goOn = false;
+						break;
+					} else if (res.isOverflow()) {
+						chars.limit(chars.position());
+						chars.rewind();
+						final int value = chars.capacity() * 2;
+						final CharBuffer charBuffer = CharBuffer
+								.allocate(value);
+						charBuffer.put(chars);
+						chars = charBuffer;
+					}
+				}
+				if (goOn) {
+					chars.limit(chars.position());
+					chars.rewind();
+					result = isBinary(chars);
+				}
+			}
+		} catch (final IOException e) {
+			result = false;
+		}
+		return result;
+	}
+
+	/**
+	 * Checks if is binary data.
+	 * 
+	 * @param name
+	 *            the name
+	 * @return true, if is binary data
+	 */
+	private boolean isBinaryData(final String name) {
+		return extensionMatches(name, DATA_EXTENSIONS);
+	}
+
+	/**
+	 * Checks if is executable.
+	 * 
+	 * @param name
+	 *            the name
+	 * @return true, if is executable
+	 */
+	private boolean isExecutable(final String name) {
+		return name.equals(BinaryGuesser.JAVA)
+				|| extensionMatches(name, EXE_EXTENSIONS)
+				|| containsExtension(name, EXE_EXTENSIONS);
+	}
+
+	/**
+	 * Contains extension.
+	 * 
+	 * @param name
+	 *            the name
+	 * @param exts
+	 *            the exts
+	 * @return true, if successful
+	 */
+	private boolean containsExtension(final String name, final String... exts) {
+		boolean result = false;
+		for (String ext : exts) {
+			if (name.indexOf("." + ext + ".") >= ZERO) {
+				result = true;
+				break;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Extension matches.
+	 * 
+	 * @param name
+	 *            the name
+	 * @param exts
+	 *            the exts
+	 * @return true, if successful
+	 */
+	private boolean extensionMatches(final String name, final String... exts) {
+		boolean result = false;
+		for (String ext : exts) {
+			if (name.endsWith("." + ext)) {
+				result = true;
+				break;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Checks if is bytecode.
+	 * 
+	 * @param name
+	 *            the name
+	 * @return true, if is bytecode
+	 */
+	private boolean isBytecode(final String name) {
+		return extensionMatches(name, BYTECODE_EXTENSIONS);
+	}
+
+	/**
+	 * Checks if is image.
+	 * 
+	 * @param name
+	 *            the name
+	 * @return true, if is image
+	 */
+	private boolean isImage(final String name) {
+		return extensionMatches(name, IMAGE_EXTENSIONS);
+	}
+
+	/**
+	 * Checks if is keystore.
+	 * 
+	 * @param name
+	 *            the name
+	 * @return true, if is keystore
+	 */
+	private boolean isKeystore(final String name) {
+		return extensionMatches(name, KEYSTORE_EXTENSIONS);
+	}
+
+	/**
+	 * Is a file by that name a known binary file?.
+	 * 
+	 * @param name
+	 *            the name
+	 * @return true, if is binary
+	 */
+	private boolean isBinary(final String name) {
+		boolean result = false;
+		if (name != null) {
+			final String normalisedName = GuessUtils.normalise(name);
+			result = BinaryGuesser.JAR_MANIFEST.equals(name)
+					|| isImage(normalisedName) || isKeystore(normalisedName)
+					|| isBytecode(normalisedName)
+					|| isBinaryData(normalisedName)
+					|| isExecutable(normalisedName);
+		}
+		return result;
+	}
 
 }

@@ -15,34 +15,58 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.document.impl;
 
 import org.apache.rat.api.Document;
 import org.apache.rat.api.MetaData;
 
-
 /**
  * Abstract base class for monolithic documents.
  */
 public abstract class AbstractMonolithicDocument implements Document {
-    private final String name;
-    private final MetaData metaData;
 
-    public AbstractMonolithicDocument(String pName) {
-        name = pName;
-        this.metaData = new MetaData();
-    }
+	/** The name. */
+	private final String name;
 
-    public boolean isComposite() {
-        return false;
-    }
+	/** The meta data. */
+	private final MetaData metaData;
 
-    public String getName() {
-        return name;
-    }
+	/**
+	 * Instantiates a new abstract monolithic document.
+	 * 
+	 * @param pName
+	 *            the name
+	 */
+	public AbstractMonolithicDocument(final String pName) {
+		name = pName;
+		this.metaData = new MetaData();
+	}
 
-    public MetaData getMetaData() {
-        return metaData;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.api.Document#isComposite()
+	 */
+	public boolean isComposite() {
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.api.Document#getName()
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.api.Document#getMetaData()
+	 */
+	public MetaData getMetaData() {
+		return metaData;
+	}
 }

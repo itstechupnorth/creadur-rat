@@ -15,17 +15,40 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.report;
 
 import org.apache.rat.api.Document;
 import org.apache.rat.api.RatException;
 
+/**
+ * The Interface RatReport.
+ */
 public interface RatReport {
 
-    public void startReport() throws RatException;
-    
-    public void report(Document document) throws RatException;
-    
-    public void endReport() throws RatException;
+	/**
+	 * Start report.
+	 * 
+	 * @throws RatException
+	 *             the rat exception
+	 */
+	void startReport() throws RatException;
+
+	/**
+	 * Report.
+	 * 
+	 * @param document
+	 *            the document
+	 * @throws RatException
+	 *             the rat exception
+	 */
+	void report(Document document) throws RatException;
+
+	/**
+	 * End report.
+	 * 
+	 * @throws RatException
+	 *             the rat exception
+	 */
+	void endReport() throws RatException;
 }

@@ -18,43 +18,66 @@
  */
 package org.apache.rat.analysis;
 
+import java.io.IOException;
+
 import org.apache.rat.api.Document;
 import org.apache.rat.api.MetaData;
 import org.apache.rat.document.IDocumentAnalyser;
 import org.apache.rat.document.impl.guesser.ArchiveGuesser;
 import org.apache.rat.document.impl.guesser.BinaryGuesser;
 import org.apache.rat.document.impl.guesser.NoteGuesser;
-import java.io.IOException;
 
+/**
+ * The Class DefaultAnalyser.
+ */
 final class DefaultAnalyser implements IDocumentAnalyser {
 
-    private final IHeaderMatcher matcher;
-    private final ArchiveGuesser archiveGuesser = new ArchiveGuesser();
-    private final NoteGuesser noteGuessor = new NoteGuesser();
-    private final BinaryGuesser binaryGuessor = new BinaryGuesser();
+	/** The matcher. */
+	private final IHeaderMatcher matcher;
 
-    public DefaultAnalyser(final IHeaderMatcher matcher) {
-        super();
-        this.matcher = matcher;
-    }
+	/** The archive guesser. */
+	private final ArchiveGuesser archiveGuesser = new ArchiveGuesser();
 
-    public void analyse(final Document subject) throws IOException{
-        final MetaData.Datum documentCategory;
-        if (this.noteGuessor.matches(subject)) {
-            documentCategory = MetaData.RAT_DOCUMENT_CATEGORY_DATUM_NOTICE;
-        } else {
-            if (this.archiveGuesser.matches(subject)) {
-                documentCategory = MetaData.RAT_DOCUMENT_CATEGORY_DATUM_ARCHIVE;
-            } else if (this.binaryGuessor.matches(subject)) {
-                documentCategory = MetaData.RAT_DOCUMENT_CATEGORY_DATUM_BINARY;
-            } else {
-                documentCategory =
-                        MetaData.RAT_DOCUMENT_CATEGORY_DATUM_STANDARD;
-                final DocumentHeaderAnalyser headerAnalyser =
-                        new DocumentHeaderAnalyser(this.matcher);
-                headerAnalyser.analyse(subject);
-            }
-        }
-        subject.getMetaData().set(documentCategory);
-    }
+	/** The note guessor. */
+	private final NoteGuesser noteGuessor = new NoteGuesser();
+
+	/** The binary guessor. */
+	private final BinaryGuesser binaryGuessor = new BinaryGuesser();
+
+	/**
+	 * Instantiates a new default analyser.
+	 * 
+	 * @param matcher
+	 *            the matcher
+	 */
+	public DefaultAnalyser(final IHeaderMatcher matcher) {
+		super();
+		this.matcher = matcher;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.rat.document.IDocumentAnalyser#analyse(org.apache.rat.api.
+	 * Document)
+	 */
+	public void analyse(final Document subject) throws IOException {
+		MetaData.Datum documentCategory;
+		if (this.noteGuessor.matches(subject)) {
+			documentCategory = MetaData.RAT_DOCUMENT_CATEGORY_DATUM_NOTICE;
+		} else {
+			if (this.archiveGuesser.matches(subject)) {
+				documentCategory = MetaData.RAT_DOCUMENT_CATEGORY_DATUM_ARCHIVE;
+			} else if (this.binaryGuessor.matches(subject)) {
+				documentCategory = MetaData.RAT_DOCUMENT_CATEGORY_DATUM_BINARY;
+			} else {
+				documentCategory = MetaData.RAT_DOCUMENT_CATEGORY_DATUM_STANDARD;
+				final DocumentHeaderAnalyser headerAnalyser = new DocumentHeaderAnalyser(
+						this.matcher);
+				headerAnalyser.analyse(subject);
+			}
+		}
+		subject.getMetaData().set(documentCategory);
+	}
 }

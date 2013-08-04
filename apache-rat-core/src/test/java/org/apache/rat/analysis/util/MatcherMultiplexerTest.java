@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.analysis.util;
 
 import junit.framework.TestCase;
@@ -24,56 +24,88 @@ import org.apache.rat.analysis.IHeaderMatcher;
 import org.apache.rat.analysis.MockLicenseMatcher;
 import org.apache.rat.api.Document;
 import org.apache.rat.document.MockLocation;
-import org.apache.rat.report.claim.impl.xml.MockClaimReporter;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
+/**
+ * The Class MatcherMultiplexerTest.
+ */
 public class MatcherMultiplexerTest extends TestCase {
 
-    private static final String LINE_ONE = "Line One";
-    private static final String LINE_TWO = "Line Two";
+	/** The Constant LINE_ONE. */
+	private static final String LINE_ONE = "Line One";
 
-    MockClaimReporter reporter;
-    MockLicenseMatcher matcherOne;
-    MockLicenseMatcher matcherTwo;
+	/** The Constant LINE_TWO. */
+	private static final String LINE_TWO = "Line Two";
 
-    HeaderMatcherMultiplexer multiplexer;
+	/** The matcher one. */
+	private MockLicenseMatcher matcherOne;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        matcherOne = new MockLicenseMatcher();
-        matcherTwo = new MockLicenseMatcher();
-        IHeaderMatcher[] matchers = {matcherOne, matcherTwo};
-        multiplexer = new HeaderMatcherMultiplexer(matchers);
-        reporter = new MockClaimReporter();
-    }
+	/** The matcher two. */
+	private MockLicenseMatcher matcherTwo;
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
+	/** The multiplexer. */
+	private HeaderMatcherMultiplexer multiplexer;
 
-    public void testMatcherLine() throws Exception {
-        matcherOne.result = false;
-        matcherTwo.result = false;
-        final Document subject = new MockLocation("subject");
-        multiplexer.match(subject, LINE_ONE);
-        assertEquals("One line", 1, matcherOne.lines.size());
-        assertEquals("Same as line passed", LINE_ONE, matcherOne.lines.get(0));
-        assertEquals("One line", 1, matcherTwo.lines.size());
-        assertEquals("Same as line passed", LINE_ONE, matcherTwo.lines.get(0));
-        multiplexer.match(subject, LINE_TWO);
-        assertEquals("One line", 2, matcherOne.lines.size());
-        assertEquals("Same as line passed", LINE_TWO, matcherOne.lines.get(1));
-        assertEquals("One line", 2, matcherTwo.lines.size());
-        assertEquals("Same as line passed", LINE_TWO, matcherTwo.lines.get(1));
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	@Before
+	protected void setUp() throws Exception {
+		super.setUp();
+		matcherOne = new MockLicenseMatcher();
+		matcherTwo = new MockLicenseMatcher();
+		IHeaderMatcher[] matchers = { matcherOne, matcherTwo };
+		multiplexer = new HeaderMatcherMultiplexer(matchers);
+	}
 
-    public void testReset() {
-        multiplexer.reset();
-        assertEquals("Reset once", 1, matcherOne.resets);
-        assertEquals("Reset once", 1, matcherTwo.resets);
-        multiplexer.reset();
-        assertEquals("Reset twice", 2, matcherOne.resets);
-        assertEquals("Reset twice", 2, matcherTwo.resets);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see junit.framework.TestCase#tearDown()
+	 */
+	@After
+	protected void tearDown() throws Exception {
+		super.tearDown();
+	}
+
+	/**
+	 * Test matcher line.
+	 * 
+	 */
+	@Test
+	public void testMatcherLineHeaderMatcherMultiplexer() {
+		matcherOne.result = false;
+		matcherTwo.result = false;
+		final Document subject = new MockLocation("subject");
+		multiplexer.match(subject, LINE_ONE);
+		multiplexer.match(subject, LINE_TWO);
+		assertEquals("One line", 2, matcherOne.lines.size());
+	}
+
+	/**
+	 * Test matcher value header matcher multiplexer.
+	 */
+	@Test
+	public void testMatcherValueHeaderMatcherMultiplexer() {
+		matcherOne.result = false;
+		matcherTwo.result = false;
+		final Document subject = new MockLocation("subject");
+		multiplexer.match(subject, LINE_ONE);
+		multiplexer.match(subject, LINE_TWO);
+		assertEquals("Same as line passed", LINE_TWO, matcherTwo.lines.get(1));
+	}
+
+	/**
+	 * Test reset.
+	 */
+	@Test
+	public void testResetHeaderMatcherMultiplexer() {
+		multiplexer.reset();
+		multiplexer.reset();
+		assertEquals("Reset once", 2, matcherTwo.resets);
+	}
 }

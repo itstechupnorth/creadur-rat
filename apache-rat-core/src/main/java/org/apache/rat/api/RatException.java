@@ -15,26 +15,53 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.api;
 
+/**
+ * The Class RatException.
+ */
 public class RatException extends Exception {
 
-    private static final long serialVersionUID = 4940711222435919034L;
+	/** The Constant serialVersionUID. */
+	private static final long serialVersionUID = 4940711222435919034L;
 
-    public RatException() {
-        super();
-    }
+	/**
+	 * Instantiates a new rat exception.
+	 */
+	public RatException() {
+		super();
+	}
 
-    public RatException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	/**
+	 * Instantiates a new rat exception.
+	 * 
+	 * @param message
+	 *            the message
+	 * @param cause
+	 *            the cause
+	 */
+	public RatException(final String message, final Throwable cause) {
+		super(message, cause);
+	}
 
-    public RatException(String message) {
-        super(message);
-    }
+	/**
+	 * Instantiates a new rat exception.
+	 * 
+	 * @param message
+	 *            the message
+	 */
+	public RatException(final String message) {
+		super(message);
+	}
 
-    public RatException(Throwable cause) {
-        super(cause);
-    }
+	/**
+	 * Instantiates a new rat exception.
+	 * 
+	 * @param cause
+	 *            the cause
+	 */
+	public RatException(final Throwable cause) {
+		super(cause);
+	}
 }

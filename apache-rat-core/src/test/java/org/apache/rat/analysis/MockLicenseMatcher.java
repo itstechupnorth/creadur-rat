@@ -15,27 +15,47 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.analysis;
-
-import org.apache.rat.api.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.rat.api.Document;
+
+/**
+ * The Class MockLicenseMatcher.
+ */
 public class MockLicenseMatcher implements IHeaderMatcher {
 
-    public final List<String> lines = new ArrayList<String>();
-    public int resets = 0;
-    public boolean result = true;
+	/** The lines. */
+	public final List<String> lines = new ArrayList<String>();
 
-    public boolean match(Document subject, String line) {
-        lines.add(line);
-        return result;
-    }
+	/** The resets. */
+	public int resets;
 
-    public void reset() {
-        resets++;
-    }
+	/** The result. */
+	public boolean result = true;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.rat.analysis.IHeaderMatcher#match(org.apache.rat.api.Document,
+	 * java.lang.String)
+	 */
+	public boolean match(final Document subject, final String line) {
+		lines.add(line);
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.analysis.IHeaderMatcher#reset()
+	 */
+	public void reset() {
+		resets++;
+	}
 
 }
