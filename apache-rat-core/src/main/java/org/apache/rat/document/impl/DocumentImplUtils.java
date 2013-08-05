@@ -28,33 +28,37 @@ import java.util.zip.ZipInputStream;
 import org.apache.commons.io.IOUtils;
 
 /**
- *
+ * The Class DocumentImplUtils.
  */
 public final class DocumentImplUtils {
 
 	/**
-	 * 
+	 * Instantiates a new document impl utils.
 	 */
-	private DocumentImplUtils() {
+	public DocumentImplUtils() {
 		super();
 	}
 
 	/**
+	 * To name.
 	 * 
 	 * @param file
-	 * @return
+	 *            the file
+	 * @return the string
 	 */
-	public final static String toName(final File file) {
+	public static String toName(final File file) {
 		String path = file.getPath();
 		return path.replace('\\', '/');
 	}
 
 	/**
+	 * Checks if is zip stream.
 	 * 
 	 * @param stream
-	 * @return
+	 *            the stream
+	 * @return true, if is zip stream
 	 */
-	public static final boolean isZipStream(final InputStream stream) {
+	public static boolean isZipStream(final InputStream stream) {
 		ZipInputStream zip = new ZipInputStream(stream);
 		boolean result = true;
 		try {
@@ -70,11 +74,13 @@ public final class DocumentImplUtils {
 	}
 
 	/**
+	 * Checks if is zip.
 	 * 
 	 * @param file
-	 * @return
+	 *            the file
+	 * @return true, if is zip
 	 */
-	public static final boolean isZip(final File file) {
+	public static boolean isZip(final File file) {
 		boolean result;
 		try {
 			result = isZipStream(new FileInputStream(file));

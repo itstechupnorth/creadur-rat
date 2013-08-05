@@ -15,41 +15,25 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */
-package org.apache.rat.report;
+ */ 
 
-import org.apache.rat.api.Document;
-import org.apache.rat.api.RatException;
+package org.apache.rat.analysis;
+
+import static org.junit.Assert.assertNotNull;
+
+import org.junit.Test;
 
 /**
- * Abstract base class for deriving implementations of {@link RatReport}.
+ * The Class DefaultAnalyserFactoryTest.
  */
-public abstract class AbstractReport implements RatReport {
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.rat.report.RatReport#startReport()
+public class DefaultAnalyserFactoryTest {
+    
+	/**
+	 * Test default analyser factory constructor.
 	 */
-	public void startReport() throws RatException {
-		// Does nothing
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.rat.report.RatReport#report(org.apache.rat.api.Document)
-	 */
-	public void report(final Document document) throws RatException {
-		// Does nothing
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.rat.report.RatReport#endReport()
-	 */
-	public void endReport() throws RatException {
-		// Does nothing
-	}
+    @Test
+	public void testDefaultAnalyserFactoryConstructor() {
+		DefaultAnalyserFactory defaultAnalyserFactory = new DefaultAnalyserFactory();
+		assertNotNull("Not Null", defaultAnalyserFactory);
+    }
 }

@@ -15,135 +15,242 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.report.claim.impl.xml;
 
 import java.io.IOException;
 import java.util.Calendar;
 
 import org.apache.commons.lang.time.DateFormatUtils;
-
 import org.apache.rat.api.Document;
 import org.apache.rat.api.MetaData;
 import org.apache.rat.api.RatException;
 import org.apache.rat.report.AbstractReport;
 import org.apache.rat.report.xml.writer.IXmlWriter;
 
+/**
+ * The Class SimpleXmlClaimReporter.
+ */
 public class SimpleXmlClaimReporter extends AbstractReport {
-    public static final String LICENSE_APPROVAL_PREDICATE = "license-approval";
-    public static final String LICENSE_FAMILY_PREDICATE = "license-family";
-    public static final String HEADER_SAMPLE_PREDICATE = "header-sample";
-    public static final String HEADER_TYPE_PREDICATE = "header-type";
-    public static final String FILE_TYPE_PREDICATE = "type";
-    public static final String ARCHIVE_TYPE_PREDICATE = "archive-type";
-    public static final String ARCHIVE_TYPE_UNREADABLE = "unreadable";
-    public static final String ARCHIVE_TYPE_READABLE = "readable";
 
-    private static final String NAME = "name";
-    private final IXmlWriter writer;
-    private boolean firstTime = true;
+	/** The Constant LICENSE_APPROVAL_PREDICATE. */
+	public static final String LICENSE_APPROVAL_PREDICATE = "license-approval";
 
-    public SimpleXmlClaimReporter(final IXmlWriter writer) {
-        this.writer = writer;
-    }
+	/** The Constant LICENSE_FAMILY_PREDICATE. */
+	public static final String LICENSE_FAMILY_PREDICATE = "license-family";
 
+	/** The Constant HEADER_SAMPLE_PREDICATE. */
+	public static final String HEADER_SAMPLE_PREDICATE = "header-sample";
 
-    /**
-     * Writes a single claim to the XML file.
-     * @param pPredicate The claims predicate.
-     * @param pObject The claims object.
-     * @param pLiteral Whether to write the object as an element (true),
-     *   or an attribute (false).
-     * @throws IOException An I/O error occurred while writing the claim.
-     * @throws RatException Another error occurred while writing the claim.
-     */
-    protected void writeClaim(String pPredicate, String pObject, boolean pLiteral)
-    throws IOException, RatException {
-        if (pLiteral) {
-            writer.openElement(pPredicate).content(pObject).closeElement();
-        } else {
-            writer.openElement(pPredicate).attribute(NAME, pObject).closeElement();
-        }
-    }
+	/** The Constant HEADER_TYPE_PREDICATE. */
+	public static final String HEADER_TYPE_PREDICATE = "header-type";
 
-    @Override
-    public void report(final Document subject) throws RatException {
-        try {
-            if (firstTime) {
-                firstTime = false;
-            } else {
-                writer.closeElement();
-            }
-            writer.openElement("resource").attribute(NAME, subject.getName());
-            writeDocumentClaims(subject);
-        } catch (IOException e) {
-            throw new RatException("XML writing failure: " + e.getMessage()
-                    + " subject: " + subject, e);
-        }
-    }
+	/** The Constant FILE_TYPE_PREDICATE. */
+	public static final String FILE_TYPE_PREDICATE = "type";
 
-    private void writeDocumentClaims(final Document subject) throws IOException, RatException {
-        final MetaData metaData = subject.getMetaData();
-        writeHeaderSample(metaData);
-        writeHeaderCategory(metaData);
-        writeLicenseFamilyName(metaData);
-        writeApprovedLicense(metaData);
-        writeDocumentCategory(metaData);
-    }
+	/** The Constant ARCHIVE_TYPE_PREDICATE. */
+	public static final String ARCHIVE_TYPE_PREDICATE = "archive-type";
 
-    private void writeApprovedLicense(final MetaData metaData) throws IOException, RatException {
-        final String approvedLicense = metaData.value(MetaData.RAT_URL_APPROVED_LICENSE);
-        if (approvedLicense != null) {
-            writeClaim(LICENSE_APPROVAL_PREDICATE, approvedLicense, false);
-        }
-    }
+	/** The Constant ARCHIVE_TYPE_UNREADABLE. */
+	public static final String ARCHIVE_TYPE_UNREADABLE = "unreadable";
 
-    private void writeLicenseFamilyName(final MetaData metaData) throws IOException, RatException {
-        final String licenseFamilyName = metaData.value(MetaData.RAT_URL_LICENSE_FAMILY_NAME);
-        if (licenseFamilyName != null) {
-            writeClaim(LICENSE_FAMILY_PREDICATE, licenseFamilyName, false);
-        }
-    }
+	/** The Constant ARCHIVE_TYPE_READABLE. */
+	public static final String ARCHIVE_TYPE_READABLE = "readable";
 
-    private void writeHeaderCategory(final MetaData metaData) throws IOException, RatException {
-        final String headerCategory = metaData.value(MetaData.RAT_URL_HEADER_CATEGORY);
-        if (headerCategory != null) {
-            writeClaim(HEADER_TYPE_PREDICATE, headerCategory, false);
-        }
-    }
+	/** The Constant NAME. */
+	private static final String NAME = "name";
 
-    private void writeHeaderSample(final MetaData metaData) throws IOException, RatException {
-        final String sample = metaData.value(MetaData.RAT_URL_HEADER_SAMPLE);
-        if (sample != null) {
-            writeClaim(HEADER_SAMPLE_PREDICATE, sample, true);
-        }
-    }
+	/** The writer. */
+	private final IXmlWriter writer;
 
-    private void writeDocumentCategory(final MetaData metaData) throws IOException, RatException {
-        final String documentCategory = metaData.value(MetaData.RAT_URL_DOCUMENT_CATEGORY);
-        if (documentCategory != null) {
-            writeClaim(FILE_TYPE_PREDICATE, documentCategory, false);
-        }
-    }
+	/** The first time. */
+	private boolean firstTime = true;
 
-    @Override
-    public void startReport() throws RatException {
-        try {
-            writer.openElement("rat-report")
-                .attribute("timestamp",
-                           DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT
-                           .format(Calendar.getInstance()));
-        } catch (IOException e) {
-            throw new RatException("Cannot open start element", e);
-        }
-    }
+	/**
+	 * Instantiates a new simple xml claim reporter.
+	 * 
+	 * @param writer
+	 *            the writer
+	 */
+	public SimpleXmlClaimReporter(final IXmlWriter writer) {
+		super();
+		this.writer = writer;
+	}
 
-    @Override
-    public void endReport() throws RatException {
-        try {
-            writer.closeDocument();
-        } catch (IOException e) {
-            throw new RatException("Cannot close last element", e);
-        }
-    }
+	/**
+	 * Writes a single claim to the XML file.
+	 * 
+	 * @param pPredicate
+	 *            The claims predicate.
+	 * @param pObject
+	 *            The claims object.
+	 * @param pLiteral
+	 *            Whether to write the object as an element (true), or an
+	 *            attribute (false).
+	 * @throws IOException
+	 *             An I/O error occurred while writing the claim.
+	 */
+	protected void writeClaim(final String pPredicate, final String pObject,
+			final boolean pLiteral) throws IOException {
+		if (pLiteral) {
+			writer.openElement(pPredicate).content(pObject).closeElement();
+		} else {
+			writer.openElement(pPredicate).attribute(NAME, pObject)
+					.closeElement();
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.rat.report.AbstractReport#report(org.apache.rat.api.Document)
+	 */
+	@Override
+	public void report(final Document subject) throws RatException {
+		try {
+			if (firstTime) {
+				firstTime = false;
+			} else {
+				writer.closeElement();
+			}
+			writer.openElement("resource").attribute(NAME, subject.getName());
+			writeDocumentClaims(subject);
+		} catch (IOException e) {
+			throw new RatException("XML writing failure: " + e.getMessage()
+					+ " subject: " + subject, e);
+		}
+	}
+
+	/**
+	 * Write document claims.
+	 * 
+	 * @param subject
+	 *            the subject
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	private void writeDocumentClaims(final Document subject)
+ throws IOException {
+		final MetaData metaData = subject.getMetaData();
+		writeHeaderSample(metaData);
+		writeHeaderCategory(metaData);
+		writeLicenseFamilyName(metaData);
+		writeApprovedLicense(metaData);
+		writeDocumentCategory(metaData);
+	}
+
+	/**
+	 * Write approved license.
+	 * 
+	 * @param metaData
+	 *            the meta data
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	private void writeApprovedLicense(final MetaData metaData)
+			throws IOException {
+		final String approvedLicense = metaData
+				.value(MetaData.RAT_URL_APPROVED_LICENSE);
+		if (approvedLicense != null) {
+			writeClaim(LICENSE_APPROVAL_PREDICATE, approvedLicense, false);
+		}
+	}
+
+	/**
+	 * Write license family name.
+	 * 
+	 * @param metaData
+	 *            the meta data
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	private void writeLicenseFamilyName(final MetaData metaData)
+			throws IOException {
+		final String licenseFamilyName = metaData
+				.value(MetaData.RAT_URL_LICENSE_FAMILY_NAME);
+		if (licenseFamilyName != null) {
+			writeClaim(LICENSE_FAMILY_PREDICATE, licenseFamilyName, false);
+		}
+	}
+
+	/**
+	 * Write header category.
+	 * 
+	 * @param metaData
+	 *            the meta data
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	private void writeHeaderCategory(final MetaData metaData)
+			throws IOException {
+		final String headerCategory = metaData
+				.value(MetaData.RAT_URL_HEADER_CATEGORY);
+		if (headerCategory != null) {
+			writeClaim(HEADER_TYPE_PREDICATE, headerCategory, false);
+		}
+	}
+
+	/**
+	 * Write header sample.
+	 * 
+	 * @param metaData
+	 *            the meta data
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	private void writeHeaderSample(final MetaData metaData) throws IOException {
+		final String sample = metaData.value(MetaData.RAT_URL_HEADER_SAMPLE);
+		if (sample != null) {
+			writeClaim(HEADER_SAMPLE_PREDICATE, sample, true);
+		}
+	}
+
+	/**
+	 * Write document category.
+	 * 
+	 * @param metaData
+	 *            the meta data
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	private void writeDocumentCategory(final MetaData metaData)
+			throws IOException {
+		final String documentCategory = metaData
+				.value(MetaData.RAT_URL_DOCUMENT_CATEGORY);
+		if (documentCategory != null) {
+			writeClaim(FILE_TYPE_PREDICATE, documentCategory, false);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.report.AbstractReport#startReport()
+	 */
+	@Override
+	public void startReport() throws RatException {
+		try {
+			writer.openElement("rat-report").attribute(
+					"timestamp",
+					DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT
+							.format(Calendar.getInstance()));
+		} catch (IOException e) {
+			throw new RatException("Cannot open start element", e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.report.AbstractReport#endReport()
+	 */
+	@Override
+	public void endReport() throws RatException {
+		try {
+			writer.closeDocument();
+		} catch (IOException e) {
+			throw new RatException("Cannot close last element", e);
+		}
+	}
 }

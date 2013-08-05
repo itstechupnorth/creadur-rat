@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.analysis;
 
 import java.io.IOException;
@@ -24,31 +24,44 @@ import java.io.Reader;
 import org.apache.rat.api.Document;
 import org.apache.rat.document.IDocumentAnalyser;
 
+/**
+ * The Class DocumentHeaderAnalyser.
+ */
 public class DocumentHeaderAnalyser implements IDocumentAnalyser {
 
-    private final IHeaderMatcher matcher;
-    
-    public DocumentHeaderAnalyser(final IHeaderMatcher matcher) {
-        super();
-        this.matcher = matcher;
-    }
+	/** The matcher. */
+	private final IHeaderMatcher matcher;
 
-    public void analyse(Document document) throws IOException{
-        Reader reader = null;
-        try {
-            reader = document.reader();
-            // TODO: worker function should be moved into this class
-            HeaderCheckWorker worker = new HeaderCheckWorker(reader, matcher, document);
-            worker.read();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    // SWALLOW
-                }
-            }
-        }
-     }
+	/**
+	 * Instantiates a new document header analyser.
+	 * 
+	 * @param matcher
+	 *            the matcher
+	 */
+	public DocumentHeaderAnalyser(final IHeaderMatcher matcher) {
+		super();
+		this.matcher = matcher;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.rat.document.IDocumentAnalyser#analyse(org.apache.rat.api.
+	 * Document)
+	 */
+	public void analyse(final Document document) throws IOException {
+		Reader reader = null;
+		try {
+			reader = document.reader();
+			HeaderCheckWorker worker = new HeaderCheckWorker(reader, matcher,
+					document);
+			worker.read();
+		} finally {
+			if (reader != null) {
+				reader.close();
+			}
+		}
+	}
 
 }

@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.analysis.util;
 
 import org.apache.rat.analysis.IHeaderMatcher;
@@ -23,31 +23,50 @@ import org.apache.rat.api.Document;
 
 /**
  * Delegates to an ordered set of matchers.
- *
+ * 
  */
 public final class HeaderMatcherMultiplexer implements IHeaderMatcher {
 
-    private final IHeaderMatcher[] matchers;
+	/** The matchers. */
+	private final IHeaderMatcher[] matchers;
 
-    public HeaderMatcherMultiplexer(final IHeaderMatcher[] matchers) {
-        this.matchers = matchers;
-    }
+	/**
+	 * Instantiates a new header matcher multiplexer.
+	 * 
+	 * @param matchers
+	 *            the matchers
+	 */
+	public HeaderMatcherMultiplexer(final IHeaderMatcher[] matchers) {
+		this.matchers = matchers.clone();
+	}
 
-    public boolean match(Document subject, String line) {
-        boolean result = false;
-        for (IHeaderMatcher matcher : matchers) {
-            result = matcher.match(subject, line);
-            if (result) {
-                break;
-            }
-        }
-        return result;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.rat.analysis.IHeaderMatcher#match(org.apache.rat.api.Document,
+	 * java.lang.String)
+	 */
+	public boolean match(final Document subject, final String line) {
+		boolean result = false;
+		for (IHeaderMatcher matcher : matchers) {
+			result = matcher.match(subject, line);
+			if (result) {
+				break;
+			}
+		}
+		return result;
+	}
 
-    public void reset() {
-        for (IHeaderMatcher matcher : matchers) {
-            matcher.reset();
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.analysis.IHeaderMatcher#reset()
+	 */
+	public void reset() {
+		for (IHeaderMatcher matcher : matchers) {
+			matcher.reset();
+		}
+	}
 
 }

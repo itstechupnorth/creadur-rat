@@ -15,14 +15,25 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.document;
 
-import org.apache.rat.api.Document;
 import java.io.IOException;
 
+import org.apache.rat.api.Document;
 
+/**
+ * The Interface IDocumentAnalyser.
+ */
 public interface IDocumentAnalyser {
 
-    public void analyse(Document document) throws IOException;
+	/**
+	 * Analyse.
+	 * 
+	 * @param document
+	 *            the document
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	void analyse(Document document) throws IOException;
 }

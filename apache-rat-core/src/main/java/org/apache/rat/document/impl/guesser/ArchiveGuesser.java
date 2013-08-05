@@ -22,39 +22,65 @@ import java.util.Locale;
 
 import org.apache.rat.api.Document;
 
+/**
+ * The Class ArchiveGuesser.
+ */
 public class ArchiveGuesser {
 
-    private static final String[] ARCHIVE_EXTENSIONS = { "jar", "gz", "zip",
-            "tar", "bz", "bz2", "rar", "war", };
+	/** The Constant ARCHIVE_EXTENSIONS. */
+	private static final String[] ARCHIVE_EXTENSIONS = { "jar", "gz", "zip",
+			"tar", "bz", "bz2", "rar", "war", };
 
-    private final String[] archiveExtensions;
+	/** The archive extensions. */
+	private final String[] archiveExtensions;
 
-    public ArchiveGuesser() {
-        this(ARCHIVE_EXTENSIONS);
-    }
+	/**
+	 * Instantiates a new archive guesser.
+	 */
+	public ArchiveGuesser() {
+		this(ARCHIVE_EXTENSIONS);
+	}
 
-    public ArchiveGuesser(final String[] archiveExtensions) {
-        super();
-        this.archiveExtensions = archiveExtensions;
-    }
+	/**
+	 * Instantiates a new archive guesser.
+	 * 
+	 * @param archiveExtensions
+	 *            the archive extensions
+	 */
+	public ArchiveGuesser(final String... archiveExtensions) {
+		super();
+		this.archiveExtensions = archiveExtensions.clone();
+	}
 
-    public boolean matches(final Document subject) {
-        return isArchive(subject.getName());
-    }
+	/**
+	 * Matches.
+	 * 
+	 * @param subject
+	 *            the subject
+	 * @return true, if successful
+	 */
+	public boolean matches(final Document subject) {
+		return isArchive(subject.getName());
+	}
 
-    /**
-     * Is a file by that name an archive?
-     */
-    public boolean isArchive(final String name) {
-        if (name == null) {
-            return false;
-        }
-        final String nameToLower = name.toLowerCase(Locale.US);
-        for (final String element : this.archiveExtensions) {
-            if (nameToLower.endsWith("." + element)) {
-                return true;
-            }
-        }
-        return false;
-    }
+	/**
+	 * Is a file by that name an archive?.
+	 * 
+	 * @param name
+	 *            the name
+	 * @return true, if is archive
+	 */
+	public boolean isArchive(final String name) {
+		boolean result = false;
+		if (name != null) {
+			final String nameToLower = name.toLowerCase(Locale.US);
+			for (String element : this.archiveExtensions) {
+				if (nameToLower.endsWith("." + element)) {
+					result = true;
+					break;
+				}
+			}
+		}
+		return result;
+	}
 }
