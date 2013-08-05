@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.policy;
 
 import static org.apache.rat.api.domain.RatLicenseFamily.APACHE;
@@ -31,22 +31,20 @@ import java.util.Arrays;
 import org.apache.rat.api.Document;
 import org.apache.rat.api.MetaData;
 import org.apache.rat.api.MetaData.Datum;
-import org.apache.rat.document.IDocumentAnalyser;
 import org.apache.rat.license.ILicenseFamily;
 
-public class DefaultPolicy implements IDocumentAnalyser {
-	private static final String[] APPROVED_LICENSES = { APACHE.getName(),
-			OASIS.getName(),
-			W3C.getName(), W3C_DOCUMENTATION.getName(),
-			TMF854.getName(),
-			MIT.getName(), CDDL1.getName() };
-    
-    private static final String[] toNames(final ILicenseFamily[] approvedLicenses) {
+public class DefaultPolicy {
+    private static final String[] APPROVED_LICENSES = { APACHE.getName(),
+            OASIS.getName(), W3C.getName(), W3C_DOCUMENTATION.getName(),
+            TMF854.getName(), MIT.getName(), CDDL1.getName() };
+
+    private static final String[] toNames(
+            final ILicenseFamily[] approvedLicenses) {
         String[] results = null;
         if (approvedLicenses != null) {
             final int length = approvedLicenses.length;
             results = new String[length];
-            for (int i=0;i<length;i++) {
+            for (int i = 0; i < length; i++) {
                 results[i] = approvedLicenses[i].getFamilyName();
             }
         }
@@ -54,11 +52,11 @@ public class DefaultPolicy implements IDocumentAnalyser {
     }
 
     private final String[] approvedLicenseNames;
-    
+
     public DefaultPolicy() {
         this(APPROVED_LICENSES);
     }
-    
+
     public DefaultPolicy(final ILicenseFamily[] approvedLicenses) {
         this(toNames(approvedLicenses));
     }
@@ -69,12 +67,14 @@ public class DefaultPolicy implements IDocumentAnalyser {
         } else {
             final int length = approvedLicenseNames.length;
             this.approvedLicenseNames = new String[length];
-            System.arraycopy(approvedLicenseNames, 0, this.approvedLicenseNames, 0, length);
+            System.arraycopy(approvedLicenseNames, 0,
+                    this.approvedLicenseNames, 0, length);
         }
         Arrays.sort(this.approvedLicenseNames);
     }
 
-    public void reportLicenseApprovalClaim(final Document subject, final boolean isAcceptable) {
+    public void reportLicenseApprovalClaim(final Document subject,
+            final boolean isAcceptable) {
         final Datum datum;
         if (isAcceptable) {
             datum = MetaData.RAT_APPROVED_LICENSE_DATIM_TRUE;
@@ -83,12 +83,15 @@ public class DefaultPolicy implements IDocumentAnalyser {
         }
         subject.getMetaData().set(datum);
     }
-    
+
     public void analyse(final Document subject) {
         if (subject != null) {
-            final String name = subject.getMetaData().value(MetaData.RAT_URL_LICENSE_FAMILY_NAME);
+            final String name =
+                    subject.getMetaData().value(
+                            MetaData.RAT_URL_LICENSE_FAMILY_NAME);
             if (name != null) {
-                final boolean isApproved = Arrays.binarySearch(approvedLicenseNames, name) >= 0;
+                final boolean isApproved =
+                        Arrays.binarySearch(this.approvedLicenseNames, name) >= 0;
                 reportLicenseApprovalClaim(subject, isApproved);
             }
         }
