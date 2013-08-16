@@ -15,10 +15,18 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.license;
 
-
+/**
+ * The Interface ILicenseFamily.
+ */
 public interface ILicenseFamily {
-    public String getFamilyName();
+
+	/**
+	 * Gets the family name.
+	 * 
+	 * @return the family name
+	 */
+	String getFamilyName();
 }

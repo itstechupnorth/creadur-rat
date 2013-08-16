@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.document;
 
 import java.io.IOException;
@@ -25,44 +25,93 @@ import java.io.Reader;
 import org.apache.rat.api.Document;
 import org.apache.rat.api.MetaData;
 
+/**
+ * The Class MockDocument.
+ */
 public class MockDocument implements Document {
 
-    public Reader reader;
-    public String name;
-    private final MetaData metaData = new MetaData();
+	/** The reader. */
+	public Reader reader;
 
-    public MockDocument() {
-        this(null, "name");
-    }
+	/** The name. */
+	public String name;
 
-    public MockDocument(String name) {
-        this(null, name);
-    }
-    
-    public MockDocument(Reader reader, String name) {
-        super();
-        this.reader = reader;
-        this.name = name;
-    }
+	/** The meta data. */
+	private final MetaData metaData = new MetaData();
 
-    public Reader reader() throws IOException {
-        return reader;
-    }
+	/**
+	 * Instantiates a new mock document.
+	 */
+	public MockDocument() {
+		this(null, "name");
+	}
 
-    public String getName() {
-        return name;
-    }
+	/**
+	 * Instantiates a new mock document.
+	 * 
+	 * @param name
+	 *            the name
+	 */
+	public MockDocument(final String name) {
+		this(null, name);
+	}
 
-    public boolean isComposite() {
-        return false;
-    }
-    
-    public MetaData getMetaData() {
-        return metaData;
-    }
-    
+	/**
+	 * Instantiates a new mock document.
+	 * 
+	 * @param reader
+	 *            the reader
+	 * @param name
+	 *            the name
+	 */
+	public MockDocument(final Reader reader, final String name) {
+		super();
+		this.reader = reader;
+		this.name = name;
+	}
 
-    public InputStream inputStream() throws IOException {
-        throw new UnsupportedOperationException();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.api.Document#reader()
+	 */
+	public Reader reader() throws IOException {
+		return reader;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.api.Document#getName()
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.api.Document#isComposite()
+	 */
+	public boolean isComposite() {
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.api.Document#getMetaData()
+	 */
+	public MetaData getMetaData() {
+		return metaData;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.api.Document#inputStream()
+	 */
+	public InputStream inputStream() throws IOException {
+		throw new UnsupportedOperationException();
+	}
 }

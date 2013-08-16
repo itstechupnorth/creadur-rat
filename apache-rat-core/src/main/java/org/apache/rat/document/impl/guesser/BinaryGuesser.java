@@ -72,13 +72,55 @@ public class BinaryGuesser {
 	/** The Constant ASCII_CHAR_THREASHOLD. */
 	private static final int ASCII_CHAR_THREASHOLD = 8;
 
+	/** The Constant ZERO. */
 	private static final int ZERO = 0;
+
+	/** The data extensions. */
+	private final String[] dataExtensions;
+
+	/** The exe extensions. */
+	private final String[] exeExtensions;
+
+	/** The keystore extensions. */
+	private final String[] keystoreExtensions;
+
+	/** The image extensions. */
+	private final String[] imageExtensions;
+
+	/** The bytecode extensions. */
+	private final String[] bytecodeExtensions;
 
 	/**
 	 * Instantiates a new binary guesser.
 	 */
 	public BinaryGuesser() {
+		this(DATA_EXTENSIONS, EXE_EXTENSIONS, KEYSTORE_EXTENSIONS,
+				IMAGE_EXTENSIONS, BYTECODE_EXTENSIONS);
+	}
+
+	/**
+	 * Instantiates a new binary guesser.
+	 * 
+	 * @param dataExtensions
+	 *            the data extensions
+	 * @param exeExtensions
+	 *            the exe extensions
+	 * @param keystoreExtensions
+	 *            the keystore extensions
+	 * @param imageExtensions
+	 *            the image extensions
+	 * @param bytecodeExtensions
+	 *            the bytecode extensions
+	 */
+	public BinaryGuesser(final String[] dataExtensions,
+			final String[] exeExtensions, final String[] keystoreExtensions,
+			final String[] imageExtensions, final String[] bytecodeExtensions) {
 		super();
+		this.dataExtensions = dataExtensions.clone();
+		this.exeExtensions = exeExtensions.clone();
+		this.keystoreExtensions = keystoreExtensions.clone();
+		this.imageExtensions = imageExtensions.clone();
+		this.bytecodeExtensions = bytecodeExtensions.clone();
 	}
 
 	/**
@@ -157,8 +199,8 @@ public class BinaryGuesser {
 	 * binary and return true.
 	 * </p>
 	 * 
-	 * @param in
-	 *            the in
+	 * @param inputStream
+	 *            the input stream
 	 * @return true, if is binary
 	 */
 	private boolean isBinary(final InputStream inputStream) {
@@ -212,7 +254,7 @@ public class BinaryGuesser {
 	 * @return true, if is binary data
 	 */
 	private boolean isBinaryData(final String name) {
-		return extensionMatches(name, DATA_EXTENSIONS);
+		return extensionMatches(name, this.dataExtensions);
 	}
 
 	/**
@@ -224,8 +266,8 @@ public class BinaryGuesser {
 	 */
 	private boolean isExecutable(final String name) {
 		return name.equals(BinaryGuesser.JAVA)
-				|| extensionMatches(name, EXE_EXTENSIONS)
-				|| containsExtension(name, EXE_EXTENSIONS);
+				|| extensionMatches(name, this.exeExtensions)
+				|| containsExtension(name, this.exeExtensions);
 	}
 
 	/**
@@ -276,7 +318,7 @@ public class BinaryGuesser {
 	 * @return true, if is bytecode
 	 */
 	private boolean isBytecode(final String name) {
-		return extensionMatches(name, BYTECODE_EXTENSIONS);
+		return extensionMatches(name, this.bytecodeExtensions);
 	}
 
 	/**
@@ -287,7 +329,7 @@ public class BinaryGuesser {
 	 * @return true, if is image
 	 */
 	private boolean isImage(final String name) {
-		return extensionMatches(name, IMAGE_EXTENSIONS);
+		return extensionMatches(name, this.imageExtensions);
 	}
 
 	/**
@@ -298,7 +340,7 @@ public class BinaryGuesser {
 	 * @return true, if is keystore
 	 */
 	private boolean isKeystore(final String name) {
-		return extensionMatches(name, KEYSTORE_EXTENSIONS);
+		return extensionMatches(name, this.keystoreExtensions);
 	}
 
 	/**
@@ -311,7 +353,7 @@ public class BinaryGuesser {
 	private boolean isBinary(final String name) {
 		boolean result = false;
 		if (name != null) {
-			final String normalisedName = GuessUtils.normalise(name);
+			final String normalisedName = new GuessUtils().normalise(name);
 			result = BinaryGuesser.JAR_MANIFEST.equals(name)
 					|| isImage(normalisedName) || isKeystore(normalisedName)
 					|| isBytecode(normalisedName)

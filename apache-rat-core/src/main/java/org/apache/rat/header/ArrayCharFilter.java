@@ -15,29 +15,46 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.header;
 
+/**
+ * The Class ArrayCharFilter.
+ */
 class ArrayCharFilter implements CharFilter {
 
-    private final char[] filtered;
-    private final int length;
-    
-    protected ArrayCharFilter(final char[] filtered) {
-        super();
-        this.filtered = filtered;
-        length = filtered.length;
-    }
+	/** The filtered. */
+	private final char[] filtered;
 
-    public boolean isFilteredOut(char character) {
-        boolean result = false;
-        for(int i=0; i<length ;i++) {
-            if (character == filtered[i]) {
-                result = true;
-                break;
-            }
-        }
-        return result;
-    }
+	/** The length. */
+	private final int length;
+
+	/**
+	 * Instantiates a new array char filter.
+	 * 
+	 * @param filtered
+	 *            the filtered
+	 */
+	protected ArrayCharFilter(final char... filtered) {
+		super();
+		this.filtered = filtered;
+		length = filtered.length;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.header.CharFilter#isFilteredOut(char)
+	 */
+	public boolean isFilteredOut(final char character) {
+		boolean result = false;
+		for (int i = 0; i < length; i++) {
+			if (character == filtered[i]) {
+				result = true;
+				break;
+			}
+		}
+		return result;
+	}
 
 }

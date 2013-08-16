@@ -15,13 +15,20 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.license;
 
 import static org.apache.rat.api.domain.RatLicenseFamily.DOJO;
 
+/**
+ * The Class ModifiedBSDLicenseFamily.
+ */
 public class ModifiedBSDLicenseFamily extends SimpleLicenseFamily {
-    public ModifiedBSDLicenseFamily() {
+
+	/**
+	 * Instantiates a new modified bsd license family.
+	 */
+	public ModifiedBSDLicenseFamily() {
 		super(DOJO.getName());
-    }
+	}
 }
