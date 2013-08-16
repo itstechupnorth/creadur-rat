@@ -15,13 +15,20 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.license;
 
 import static org.apache.rat.api.domain.RatLicenseFamily.APACHE;
 
+/**
+ * The Class Apache20LicenseFamily.
+ */
 public final class Apache20LicenseFamily extends SimpleLicenseFamily {
-    public Apache20LicenseFamily() {
+
+	/**
+	 * Instantiates a new apache20 license family.
+	 */
+	public Apache20LicenseFamily() {
 		super(APACHE.getName());
-    }
+	}
 }

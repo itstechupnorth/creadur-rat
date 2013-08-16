@@ -15,31 +15,49 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.document;
-
-import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import org.apache.rat.api.Document;
 
+import org.apache.rat.api.Document;
+import org.junit.Test;
+
+/**
+ * The Class ToNameTransformerTest.
+ */
 public class ToNameTransformerTest {
 
-    ToNameTransformer transformer = new ToNameTransformer();
-    
-    @Test
-    public void transformLocation() {
-        Document location = new MockLocation();
-        Object result = transformer.transform(location);
-        assertNotNull("Transform into name", result);
-        assertEquals("Transform into name", location.getName(), result);
-    }
+	/** The transformer. */
+	private ToNameTransformer transformer = new ToNameTransformer();
 
-    @Test
-    public void transformNull() {
-        Object result = transformer.transform(null);
-        assertNull("Null transforms to null", result);
-    }
+	/**
+	 * Transform location.
+	 */
+	@Test
+	public void testTransformLocation() {
+		Document location = new MockLocation();
+		Object result = transformer.transform(location);
+		assertEquals("Transform into name", location.getName(), result);
+	}
+
+	/**
+	 * Transform null.
+	 */
+	@Test
+	public void testTransformNull() {
+		Object result = transformer.transform(null);
+		assertNull("Null transforms to null", result);
+	}
+
+	/**
+	 * Test transform not null.
+	 */
+	@Test
+	public void testTransformNotNull() {
+		assertNotNull("Null transforms to null",
+				ToNameTransformer.toNameTransformer());
+	}
 }

@@ -15,33 +15,48 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.header;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Before;
+import org.junit.Test;
+
+/**
+ * The Class ArrayCharFilterTest.
+ */
 public class ArrayCharFilterTest {
 
-    private static final char[] filtered = {'d', 'o', 'a'};
-    ArrayCharFilter filter;
-    
-    @Before
-    public void setUp() throws Exception {
-        filter = new ArrayCharFilter(filtered);
-    }
+	/** The Constant filtered. */
+	private static final char[] FILTERED = { 'd', 'o', 'a' };
 
-    @Test
-    public void isFilteredOut() {
-        assertTrue(filter.isFilteredOut('a'));
-        assertFalse(filter.isFilteredOut('b'));
-        assertFalse(filter.isFilteredOut('c'));
-        assertTrue(filter.isFilteredOut('d'));
-        assertFalse(filter.isFilteredOut('e'));
-        assertFalse(filter.isFilteredOut('f'));
-    }
+	/** The filter. */
+	private ArrayCharFilter filter;
+
+	/**
+	 * Sets the up.
+	 * 
+	 * @throws Exception
+	 *             the exception
+	 */
+	@Before
+	public void setUp() throws Exception {
+		filter = new ArrayCharFilter(FILTERED);
+	}
+
+	/**
+	 * Checks if is filtered out.
+	 */
+	@Test
+	public void testIsFilteredOut() {
+		assertTrue("Filter is equal a", filter.isFilteredOut('a'));
+	}
+
+	@Test
+	public void testNotFilteredOut() {
+		assertFalse("Filter is not equal b", filter.isFilteredOut('b'));
+	}
 
 }

@@ -15,67 +15,99 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.header;
+
+import static org.junit.Assert.assertEquals;
+
+import java.io.IOException;
+import java.io.StringReader;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.StringReader;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
+/**
+ * The Class FilteringSequenceFactoryTest.
+ */
 public class FilteringSequenceFactoryTest {
 
-    int capacity;
-    FilteringSequenceFactory factory;
-    SimpleCharFilter filter;
+	/** The capacity. */
+	private int capacity;
 
-    @Before
-    public void setUp() throws Exception {
-        capacity = 50;
-        filter = new SimpleCharFilter();
-        factory = new FilteringSequenceFactory(capacity, filter);
-    }
+	/** The factory. */
+	private FilteringSequenceFactory factory;
 
-    @Test
-    public void noFiltering() throws Exception {
-        final String INPUT = "Whatever";
-        StringReader reader = new StringReader(INPUT);
-        CharSequence result = factory.filter(reader);
-        assertNotNull(result);
-        String output = result.toString();
-        assertEquals("No filtering so input equals output.", INPUT, output);
-        reader = new StringReader(INPUT);
-        result = factory.filter(reader);
-        assertNotNull(result);
-        output = result.toString();
-        assertEquals("No filtering so input equals output. Independent of previous input", INPUT, output);
-    }
 
-    @Test
-    public void filtering() throws Exception {
-        final String INPUT = "Whatever";
-        StringReader reader = new StringReader(INPUT);
-        CharSequence result = factory.filter(reader);
-        assertNotNull(result);
-        String output = result.toString();
-        assertEquals("No filtering so input equals output.", INPUT, output);
-        filter.filterOut = true;
-        reader = new StringReader(INPUT);
-        result = factory.filter(reader);
-        assertNotNull(result);
-        assertEquals("All filtered output is empty. Independent of previous input", 0, result.length());
-    }
-    
-    @Test
-    public void overCapacity() throws Exception {
-        final String INPUT = "WhateverWhateverWhateverWhateverWhateverWhateverWhateverWhateverWhateverWhatever";
-        StringReader reader = new StringReader(INPUT);
-        CharSequence result = factory.filter(reader);
-        assertNotNull(result);
-        String output = new StringBuffer().append(result).toString();
-        assertEquals("No filtering so input equals output.", INPUT.substring(0, capacity), output);
-    }
+	/**
+	 * Sets the up.
+	 * 
+	 * @throws Exception
+	 *             the exception
+	 */
+	@Before
+	public void setUp() throws Exception {
+		capacity = 50;
+		SimpleCharFilter filter = new SimpleCharFilter();
+		factory = new FilteringSequenceFactory(capacity, filter);
+	}
+
+	/**
+	 * No filtering.
+	 * 
+	 * @throws IOException
+	 * 
+	 * @throws Exception
+	 *             the exception
+	 */
+	@Test
+	public void testNoFiltering() throws IOException {
+		String input = "Whatever";
+		StringReader reader = new StringReader(input);
+		CharSequence result = factory.filter(reader);
+		String output = result.toString();
+		assertEquals("No filtering so input equals output.", input, output);
+	}
+
+	/**
+	 * Filtering.
+	 * 
+	 * @throws IOException
+	 * 
+	 */
+	@Test
+	public void testFiltering() throws IOException {
+		String input = "Whatever";
+		StringReader reader = new StringReader(input);
+		CharSequence result = factory.filter(reader);
+		String output = result.toString();
+		assertEquals("No filtering so input equals output.", input, output);
+	}
+
+	/**
+	 * Over capacity.
+	 * 
+	 * @throws IOException
+	 * 
+	 * @throws Exception
+	 *             the exception
+	 */
+	@Test
+	public void testOverCapacity() throws IOException {
+		String input = "WhateverWhateverWhateverWhateverWhateverWhateverWhateverWhateverWhateverWhatever";
+		StringReader reader = new StringReader(input);
+		CharSequence result = factory.filter(reader);
+		String output = new StringBuffer().append(result).toString();
+		assertEquals("No filtering so input equals output.",
+				input.substring(0, capacity), output);
+	}
+
+	@Test
+	public void testFilteringContructorOneParameter() throws IOException {
+		String input = "Whatever";
+		factory = new FilteringSequenceFactory(new SimpleCharFilter());
+		StringReader reader = new StringReader(input);
+		CharSequence result = factory.filter(reader);
+		String output = result.toString();
+		assertEquals("No filtering so input equals output.", input, output);
+	}
 }

@@ -15,17 +15,31 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.header;
 
+/**
+ * The Class SimpleCharFilter.
+ */
 public class SimpleCharFilter implements CharFilter {
 
-    public boolean filterOut = false;
-    
-    public SimpleCharFilter() {}
+	/** The filter out. */
+	public boolean filterOut;
 
-    public boolean isFilteredOut(char character) {
-        return filterOut;
-    }
+	/**
+	 * Instantiates a new simple char filter.
+	 */
+	public SimpleCharFilter() {
+		super();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.header.CharFilter#isFilteredOut(char)
+	 */
+	public boolean isFilteredOut(final char character) {
+		return filterOut;
+	}
 
 }

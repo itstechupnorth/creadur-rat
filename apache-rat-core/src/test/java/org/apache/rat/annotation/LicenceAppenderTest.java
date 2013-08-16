@@ -23,11 +23,16 @@ import static org.junit.Assert.assertFalse;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Writer;
 import java.util.Random;
+
+import junit.framework.Assert;
 
 import org.apache.rat.test.utils.Resources;
 import org.junit.Test;
@@ -35,7 +40,7 @@ import org.junit.Test;
 /**
  * The Class TestLicenceAppender.
  */
-public class TestLicenceAppender {
+public class LicenceAppenderTest {
 
 	/** The Constant ZERO. */
 	private static final int ZERO = 0;
@@ -211,7 +216,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenceToUnknownFile() throws IOException {
+	public void testAddLicenceToUnknownFile() throws IOException {
 		String filename = qualify("tmp" + random.nextLong() + ".unknownType");
 		File file = null;
 		File newFile = null;
@@ -242,7 +247,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenceToJava() throws IOException {
+	public void testAddLicenceToJava() throws IOException {
 		String filename = "tmp.java";
 		final String firstLine = "package foo;";
 		String secondLine = "/*";
@@ -263,7 +268,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenceToJavaWithoutPackage() throws IOException {
+	public void testAddLicenceToJavaWithoutPackage() throws IOException {
 		String filename = "tmp.java";
 		String commentLine = "/*";
 		commonTestTemplate(filename, new FileCreator() {
@@ -281,7 +286,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenceToXML() throws IOException {
+	public void testAddLicenceToXML() throws IOException {
 		String filename = "tmp.xml";
 		final String firstLine = "<?xml version='1.0'?>";
 		String secondLine = "<!--";
@@ -303,7 +308,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenceToXMLWithoutDecl() throws IOException {
+	public void testAddLicenceToXMLWithoutDecl() throws IOException {
 		String filename = "tmp.xml";
 		String firstLine = "<?xml version='1.0'?>";
 		String secondLine = "<!--";
@@ -323,7 +328,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenceToHTML() throws IOException {
+	public void testAddLicenceToHTML() throws IOException {
 		String filename = "tmp.html";
 		String commentLine = "<!--";
 
@@ -343,7 +348,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenceToCSS() throws IOException {
+	public void testAddLicenceToCSS() throws IOException {
 		String filename = "tmp.css";
 		String firstLine = "/*";
 
@@ -363,7 +368,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenceToJavascript() throws IOException {
+	public void testAddLicenceToJavascript() throws IOException {
 		String filename = "tmp.js";
 		String firstLine = "/*";
 
@@ -383,7 +388,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenceToAPT() throws IOException {
+	public void testAddLicenceToAPT() throws IOException {
 		String filename = "tmp.apt";
 		String firstLine = "~~";
 
@@ -403,7 +408,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenceToProperties() throws IOException {
+	public void testAddLicenceToProperties() throws IOException {
 		String filename = "tmp.properties";
 		String firstLine = "#";
 
@@ -423,7 +428,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenceToScala() throws IOException {
+	public void testAddLicenceToScala() throws IOException {
 		String filename = "tmp.scala";
 		final String firstLine = "package foo {";
 		final String newFirstLine = "/*";
@@ -462,7 +467,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenseToRubyWithoutHashBang() throws IOException {
+	public void testAddLicenseToRubyWithoutHashBang() throws IOException {
 		String filename = "tmp.rb";
 		String firstLine = "#";
 
@@ -481,7 +486,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenseToRubyWithHashBang() throws IOException {
+	public void testAddLicenseToRubyWithHashBang() throws IOException {
 		String filename = "tmp.rb";
 		final String firstLine = "#!/usr/bin/env ruby";
 		String secondLine = "#";
@@ -502,7 +507,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenseToPerlWithoutHashBang() throws IOException {
+	public void testAddLicenseToPerlWithoutHashBang() throws IOException {
 		String filename = "tmp.pl";
 		String firstLine = "#";
 
@@ -520,7 +525,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenseToPerlWithHashBang() throws IOException {
+	public void testAddLicenseToPerlWithHashBang() throws IOException {
 		String filename = "tmp.pl";
 		final String firstLine = "#!/usr/bin/env perl";
 		String secondLine = "#";
@@ -540,7 +545,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenseToTclWithoutHashBang() throws IOException {
+	public void testAddLicenseToTclWithoutHashBang() throws IOException {
 		String filename = "tmp.tcl";
 		String firstLine = "#";
 
@@ -558,7 +563,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenseToTclWithHashBang() throws IOException {
+	public void testAddLicenseToTclWithHashBang() throws IOException {
 		String filename = "tmp.tcl";
 		final String firstLine = "#!/usr/bin/env tcl";
 		String secondLine = "#";
@@ -578,7 +583,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenceToPHP() throws IOException {
+	public void testAddLicenceToPHP() throws IOException {
 		String filename = "tmp.php";
 		final String firstLine = "<?php";
 		String secondLine = "/*";
@@ -599,7 +604,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenceToCSharp() throws IOException {
+	public void testAddLicenceToCSharp() throws IOException {
 		String filename = "tmp.cs";
 		String firstLine = "/*";
 
@@ -620,7 +625,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenceToGroovy() throws IOException {
+	public void testAddLicenceToGroovy() throws IOException {
 		String filename = "tmp.groovy";
 		String firstLine = "/*";
 
@@ -640,7 +645,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenceToCPlusPlus() throws IOException {
+	public void testAddLicenceToCPlusPlus() throws IOException {
 		String filename = "tmp.cpp";
 		String firstLine = "/*";
 
@@ -701,7 +706,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenceToVS2003solution() throws IOException {
+	public void testAddLicenceToVS2003solution() throws IOException {
 		String filename = TMP_SLN;
 		final String firstLine = "Microsoft Visual Studio Solution File,"
 				+ " Format Version 8.0";
@@ -727,7 +732,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenceToVS2005solution() throws IOException {
+	public void testAddLicenceToVS2005solution() throws IOException {
 		String filename = TMP_SLN;
 		final String firstLine = "Microsoft Visual Studio Solution File,"
 				+ " Format Version 9.0";
@@ -766,7 +771,7 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenceToVS2010ExpressSolution() throws IOException {
+	public void testAddLicenceToVS2010ExpressSolution() throws IOException {
 		String filename = TMP_SLN;
 		final String firstLine = "Microsoft Visual Studio Solution File, "
 				+ "Format Version 11.00";
@@ -822,7 +827,8 @@ public class TestLicenceAppender {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void addLicenceToVS2010SolutionWithBlankLine() throws IOException {
+	public void testAddLicenceToVS2010SolutionWithBlankLine()
+			throws IOException {
 		String filename = TMP_SLN;
 		final String firstLine = "";
 		final String secondLine = "Microsoft Visual Studio Solution File, "
@@ -873,4 +879,242 @@ public class TestLicenceAppender {
 			}
 		});
 	}
+
+	/**
+	 * Test add licence to java forced.
+	 * 
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testAddLicenceToJavaForced() throws IOException {
+		String filename = "tmp.java";
+		final String firstLine = "package foo;";
+		String secondLine = "/*";
+		commonTestTemplateForced(filename, new FileCreator() {
+			public void createFile(final Writer writer) throws IOException {
+				writer.write(firstLine + "\n");
+				writer.write("\n");
+				writer.write("public class test {\n");
+				writer.write(END_BRACKET);
+			}
+		}, checkLines(firstLine, secondLine));
+	}
+
+	/**
+	 * Common test template forced.
+	 * 
+	 * @param relativeName
+	 *            the relative name
+	 * @param creator
+	 *            the creator
+	 * @param reader
+	 *            the reader
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	private static void commonTestTemplateForced(final String relativeName,
+			final FileCreator creator, final NewFileReader reader)
+			throws IOException {
+		String name = qualify(relativeName);
+		try {
+			createTestFile(name, creator);
+
+			ApacheV2LicenceAppender appender = new ApacheV2LicenceAppender();
+			appender.setForce(true);
+			appender.append(new File(name));
+
+			BufferedReader bufferedReader = null;
+			try {
+				bufferedReader = new BufferedReader(new FileReader(name));
+				reader.readFile(bufferedReader);
+			} finally {
+				if (bufferedReader != null) {
+					bufferedReader.close();
+				}
+			}
+		} finally {
+			tryToDelete(new File(name));
+			tryToDelete(new File(name + DOT_NEW));
+		}
+	}
+
+	/**
+	 * Test get first line bat.
+	 */
+	@Test
+	public void testGetFirstLineBAT() {
+		ApacheV2LicenceAppender appender = new ApacheV2LicenceAppender();
+		int type = 12;
+		Assert.assertEquals("rem" + System.getProperty("line.separator"),
+				appender.getFirstLine(type));
+	}
+
+	/**
+	 * Test get last line bat.
+	 */
+	@Test
+	public void testGetLastLineBAT() {
+		ApacheV2LicenceAppender appender = new ApacheV2LicenceAppender();
+		int type = 12;
+		Assert.assertEquals("rem" + System.getProperty("line.separator"),
+				appender.getLastLine(type));
+	}
+
+	/**
+	 * Test get line bat.
+	 */
+	@Test
+	public void testGetLineBAT() {
+		ApacheV2LicenceAppender appender = new ApacheV2LicenceAppender();
+		int type = 12;
+		Assert.assertEquals("rem" + System.getProperty("line.separator"),
+				appender.getLine(type, ""));
+	}
+
+	/**
+	 * Test get line velocity.
+	 */
+	@Test
+	public void testGetLineVelocity() {
+		ApacheV2LicenceAppender appender = new ApacheV2LicenceAppender();
+		int type = 13;
+		Assert.assertEquals("##" + System.getProperty("line.separator"),
+				appender.getLine(type, ""));
+	}
+
+	/**
+	 * Test bom input stream read.
+	 * 
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testBOMInputStreamRead() throws IOException {
+		String document = qualify("tmp.apt");
+		FileCreator creator = new FileCreator() {
+			public void createFile(final Writer writer) throws IOException {
+				writer.write("A Simple APT file");
+				writer.write(" This file contains nothing\n");
+				writer.write(" of any importance\n");
+			}
+		};
+		createTestFile(document, creator);
+		InputStream fis = new FileInputStream(new File(document));
+		BOMInputStream bomInputStream = new BOMInputStream(fis);
+		Assert.assertEquals(65, bomInputStream.read());
+		bomInputStream.close();
+	}
+
+	/**
+	 * Test bom input stream read byte.
+	 * 
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testBOMInputStreamReadByte() throws IOException {
+		String document = qualify("tmp.apt");
+		FileCreator creator = new FileCreator() {
+			public void createFile(final Writer writer) throws IOException {
+				writer.write("A Simple APT file");
+				writer.write(" This file contains nothing\n");
+				writer.write(" of any importance\n");
+			}
+		};
+		createTestFile(document, creator);
+		InputStream fis = new FileInputStream(new File(document));
+		BOMInputStream bomInputStream = new BOMInputStream(fis);
+		FileOutputStream fos = new FileOutputStream(document);
+		byte[] buf = new byte[1000];
+		fos.write(buf);
+		fos.close();
+		Assert.assertEquals(1000, bomInputStream.read(buf));
+		bomInputStream.close();
+	}
+
+	/**
+	 * Test bom input streamskip.
+	 * 
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testBOMInputStreamskip() throws IOException {
+		String document = qualify("tmp.apt");
+		FileCreator creator = new FileCreator() {
+			public void createFile(final Writer writer) throws IOException {
+				writer.write("A Simple APT file");
+				writer.write(" This file contains nothing\n");
+				writer.write(" of any importance\n");
+			}
+		};
+		createTestFile(document, creator);
+		InputStream fis = new FileInputStream(new File(document));
+		BOMInputStream bomInputStream = new BOMInputStream(fis);
+		bomInputStream.skip(1);
+		bomInputStream.close();
+	}
+
+	/**
+	 * Test licence header with copyright.
+	 * 
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testLicenceHeaderWithCopyright() throws IOException {
+		String filename = "tmp.java";
+		final String firstLine = "package foo;";
+		String secondLine = "/*";
+		commonTestTemplateWithCopyright(filename, new FileCreator() {
+			public void createFile(final Writer writer) throws IOException {
+				writer.write(firstLine + "\n");
+				writer.write("\n");
+				writer.write("public class test {\n");
+				writer.write(END_BRACKET);
+			}
+		}, checkLines(firstLine, secondLine));
+	}
+
+	/**
+	 * Common test template with copyright.
+	 * 
+	 * @param relativeName
+	 *            the relative name
+	 * @param creator
+	 *            the creator
+	 * @param reader
+	 *            the reader
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	private static void commonTestTemplateWithCopyright(
+			final String relativeName, final FileCreator creator,
+			final NewFileReader reader) throws IOException {
+		String name = qualify(relativeName);
+		try {
+			createTestFile(name, creator);
+
+			String copyright = "Copyright SUN MICROSYSTEMS";
+			ApacheV2LicenceAppender appender = new ApacheV2LicenceAppender(
+					copyright);
+			appender.append(new File(name));
+
+			BufferedReader bufferedReader = null;
+			try {
+				bufferedReader = new BufferedReader(new FileReader(name
+						+ DOT_NEW));
+				reader.readFile(bufferedReader);
+			} finally {
+				if (bufferedReader != null) {
+					bufferedReader.close();
+				}
+			}
+		} finally {
+			tryToDelete(new File(name));
+			tryToDelete(new File(name + DOT_NEW));
+		}
+	}
+
 }
