@@ -34,66 +34,65 @@ import org.apache.rat.api.MetaData.Datum;
 import org.apache.rat.license.ILicenseFamily;
 
 public class DefaultPolicy {
-    private static final String[] APPROVED_LICENSES = { APACHE.getName(),
-            OASIS.getName(), W3C.getName(), W3C_DOCUMENTATION.getName(),
-            TMF854.getName(), MIT.getName(), CDDL1.getName() };
+	private static final String[] APPROVED_LICENSES = { APACHE.getName(),
+			OASIS.getName(), W3C.getName(), W3C_DOCUMENTATION.getName(),
+			TMF854.getName(), MIT.getName(), CDDL1.getName() };
 
-    private static final String[] toNames(
-            final ILicenseFamily[] approvedLicenses) {
-        String[] results = null;
-        if (approvedLicenses != null) {
-            final int length = approvedLicenses.length;
-            results = new String[length];
-            for (int i = 0; i < length; i++) {
-                results[i] = approvedLicenses[i].getFamilyName();
-            }
-        }
-        return results;
-    }
+	private static final String[] toNames(
+			final ILicenseFamily[] approvedLicenses) {
+		String[] results = null;
+		if (approvedLicenses != null) {
+			final int length = approvedLicenses.length;
+			results = new String[length];
+			for (int i = 0; i < length; i++) {
+				results[i] = approvedLicenses[i].getFamilyName();
+			}
+		}
+		return results;
+	}
 
-    private final String[] approvedLicenseNames;
+	private final String[] approvedLicenseNames;
 
-    public DefaultPolicy() {
-        this(APPROVED_LICENSES);
-    }
+	public DefaultPolicy() {
+		this(APPROVED_LICENSES);
+	}
 
-    public DefaultPolicy(final ILicenseFamily[] approvedLicenses) {
-        this(toNames(approvedLicenses));
-    }
+	public DefaultPolicy(final ILicenseFamily[] approvedLicenses) {
+		this(toNames(approvedLicenses));
+	}
 
-    public DefaultPolicy(final String[] approvedLicenseNames) {
-        if (approvedLicenseNames == null) {
-            this.approvedLicenseNames = APPROVED_LICENSES;
-        } else {
-            final int length = approvedLicenseNames.length;
-            this.approvedLicenseNames = new String[length];
-            System.arraycopy(approvedLicenseNames, 0,
-                    this.approvedLicenseNames, 0, length);
-        }
-        Arrays.sort(this.approvedLicenseNames);
-    }
+	public DefaultPolicy(final String[] approvedLicenseNames) {
+		if (approvedLicenseNames == null) {
+			this.approvedLicenseNames = APPROVED_LICENSES;
+		} else {
+			final int length = approvedLicenseNames.length;
+			this.approvedLicenseNames = new String[length];
+			System.arraycopy(approvedLicenseNames, 0,
+					this.approvedLicenseNames, 0, length);
+		}
+		Arrays.sort(this.approvedLicenseNames);
+	}
 
-    public void reportLicenseApprovalClaim(final Document subject,
-            final boolean isAcceptable) {
-        final Datum datum;
-        if (isAcceptable) {
-            datum = MetaData.RAT_APPROVED_LICENSE_DATIM_TRUE;
-        } else {
-            datum = MetaData.RAT_APPROVED_LICENSE_DATIM_FALSE;
-        }
-        subject.getMetaData().set(datum);
-    }
+	public void reportLicenseApprovalClaim(final Document subject,
+			final boolean isAcceptable) {
+		final Datum datum;
+		if (isAcceptable) {
+			datum = MetaData.RAT_APPROVED_LICENSE_DATIM_TRUE;
+		} else {
+			datum = MetaData.RAT_APPROVED_LICENSE_DATIM_FALSE;
+		}
+		subject.getMetaData().set(datum);
+	}
 
-    public void analyse(final Document subject) {
-        if (subject != null) {
-            final String name =
-                    subject.getMetaData().value(
-                            MetaData.RAT_URL_LICENSE_FAMILY_NAME);
-            if (name != null) {
-                final boolean isApproved =
-                        Arrays.binarySearch(this.approvedLicenseNames, name) >= 0;
-                reportLicenseApprovalClaim(subject, isApproved);
-            }
-        }
-    }
+	public void analyse(final Document subject) {
+		if (subject != null) {
+			final String name = subject.getMetaData().value(
+					MetaData.RAT_URL_LICENSE_FAMILY_NAME);
+			if (name != null) {
+				final boolean isApproved = Arrays.binarySearch(
+						this.approvedLicenseNames, name) >= 0;
+				reportLicenseApprovalClaim(subject, isApproved);
+			}
+		}
+	}
 }
