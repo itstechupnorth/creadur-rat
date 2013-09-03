@@ -23,51 +23,79 @@ import java.util.List;
 
 import org.apache.rat.analysis.DefaultAnalyser;
 import org.apache.rat.api.Document;
-import org.apache.rat.api.RatException;
 import org.apache.rat.policy.DefaultPolicy;
 import org.apache.rat.report.RatReport;
 
+/**
+ * The Class Pipeline.
+ */
 public class Pipeline implements RatReport {
 
-    private final DefaultAnalyser analyser;
-    private final DefaultPolicy policy;
-    private final List<? extends RatReport> reporters;
+	/** The analyser. */
+	private final DefaultAnalyser analyser;
 
-    public Pipeline(final DefaultAnalyser analyser, final DefaultPolicy policy,
-            final List<? extends RatReport> reporters) {
-        super();
-        this.analyser = analyser;
-        this.policy = policy;
-        this.reporters = reporters;
-    }
+	/** The policy. */
+	private final DefaultPolicy policy;
 
-    public void report(final Document document) throws RatException {
-        if (this.analyser != null) {
-            try {
-                this.analyser.analyse(document);
-            } catch (final IOException e) {
-                throw new RatException(e.getMessage(), e);
-            }
-        }
+	/** The reporters. */
+	private final List<? extends RatReport> reporters;
 
-        if (this.policy != null) {
-            this.policy.analyse(document);
-        }
+	/**
+	 * Instantiates a new pipeline.
+	 * 
+	 * @param analyser
+	 *            the analyser
+	 * @param policy
+	 *            the policy
+	 * @param reporters
+	 *            the reporters
+	 */
+	public Pipeline(final DefaultAnalyser analyser, final DefaultPolicy policy,
+			final List<? extends RatReport> reporters) {
+		super();
+		this.analyser = analyser;
+		this.policy = policy;
+		this.reporters = reporters;
+	}
 
-        for (final RatReport report : this.reporters) {
-            report.report(document);
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.report.RatReport#report(org.apache.rat.api.Document)
+	 */
+	public void report(final Document document) throws IOException {
+		if (this.analyser != null) {
+				this.analyser.analyse(document);
+		}
 
-    public void startReport() throws RatException {
-        for (final RatReport report : this.reporters) {
-            report.startReport();
-        }
-    }
+		if (this.policy != null) {
+			this.policy.analyse(document);
+		}
 
-    public void endReport() throws RatException {
-        for (final RatReport report : this.reporters) {
-            report.endReport();
-        }
-    }
+		for (RatReport report : this.reporters) {
+			report.report(document);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.report.RatReport#startReport()
+	 */
+	public void startReport() throws IOException {
+		for (RatReport report : this.reporters) {
+			report.startReport();
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.report.RatReport#endReport()
+	 */
+	public void endReport() throws IOException {
+		for (RatReport report : this.reporters) {
+			report.endReport();
+		}
+	}
 }

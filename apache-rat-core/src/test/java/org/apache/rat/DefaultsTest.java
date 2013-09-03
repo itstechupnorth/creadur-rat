@@ -16,23 +16,33 @@
  * specific language governing permissions and limitations      *
  * under the License.                                           *
  */
-package org.apache.rat.analysis.license;
+package org.apache.rat;
 
-import static org.apache.rat.api.domain.RatLicenseFamily.W3C;
+import static org.junit.Assert.assertNotNull;
 
+import org.junit.Test;
+
+// TODO: Auto-generated Javadoc
 /**
- * The Class W3CLicense.
+ * The Class DefaultsTest.
  */
-public class W3CLicense extends SimplePatternBasedLicense {
-
-	/** The Constant COPYRIGHT_URL. */
-	private static final String COPYRIGHT_URL = "http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231";
+public class DefaultsTest {
 
 	/**
-	 * Instantiates a new w3 c license.
+	 * Test get default style sheet.
 	 */
-	public W3CLicense() {
-		super(W3C.licenseFamily(), new String[] { COPYRIGHT_URL });
+	@Test
+	public void testGetDefaultStyleSheet() {
+		Defaults defaults = new Defaults();
+		assertNotNull("Not to be null", defaults.getDefaultStyleSheet());
+	}
 
+	/**
+	 * Test create default matcher.
+	 */
+	@Test
+	public void testCreateDefaultMatcher() {
+		Defaults defaults = new Defaults();
+		assertNotNull("Not to be null", defaults.createDefaultMatcher());
 	}
 }

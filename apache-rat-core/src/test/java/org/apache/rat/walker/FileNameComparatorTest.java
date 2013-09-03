@@ -15,24 +15,61 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.walker;
+
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
 
 import org.apache.rat.test.utils.Resources;
 import org.junit.Test;
 
-import java.io.IOException;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
+/**
+ * The Class FileNameComparatorTest.
+ */
 public class FileNameComparatorTest {
 
-    @Test
-    public void compare() throws IOException {
-        FileNameComparator comparator = new FileNameComparator();
-        assertNotNull(comparator);
-        final int compare = comparator.compare(Resources.getResourceFile("elements/LICENSE"), Resources.getResourceFile("elements/NOTICE"));
-        assertTrue("LICENSE is before NOTICE", compare < 0);
-    }
+	/**
+	 * Compare.
+	 * 
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testCompare() throws IOException {
+		FileNameComparator comparator = new FileNameComparator();
+		final int compare = comparator.compare(
+				Resources.getResourceFile("elements/LICENSE"),
+				Resources.getResourceFile("elements/NOTICE"));
+		assertTrue("LICENSE is before NOTICE", compare < 0);
+	}
+
+	/**
+	 * Test compare first file null.
+	 * 
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testCompareFirstFileNull() throws IOException {
+		FileNameComparator comparator = new FileNameComparator();
+		final int compare = comparator.compare(null,
+				Resources.getResourceFile("elements/NOTICE"));
+		assertTrue("LICENSE is before NOTICE", compare > 0);
+	}
+
+	/**
+	 * Test compare second file null.
+	 * 
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testCompareSecondFileNull() throws IOException {
+		FileNameComparator comparator = new FileNameComparator();
+		final int compare = comparator.compare(
+				Resources.getResourceFile("elements/LICENSE"), null);
+		assertTrue("LICENSE is before NOTICE", compare < 0);
+	}
 }

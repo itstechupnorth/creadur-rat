@@ -16,23 +16,24 @@
  * specific language governing permissions and limitations      *
  * under the License.                                           *
  */
-package org.apache.rat.analysis.license;
 
-import static org.apache.rat.api.domain.RatLicenseFamily.W3C;
+package org.apache.rat.report.claim.impl;
+
+import org.apache.rat.api.MetaData;
+import org.junit.Test;
 
 /**
- * The Class W3CLicense.
+ * The Class ClaimAggregatorTest.
  */
-public class W3CLicense extends SimplePatternBasedLicense {
-
-	/** The Constant COPYRIGHT_URL. */
-	private static final String COPYRIGHT_URL = "http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231";
+public class ClaimAggregatorTest {
 
 	/**
-	 * Instantiates a new w3 c license.
+	 * Test handle header category claim gen.
 	 */
-	public W3CLicense() {
-		super(W3C.licenseFamily(), new String[] { COPYRIGHT_URL });
-
+	@Test
+	public void testHandleHeaderCategoryClaimGen() {
+		ClaimAggregator claimAggregator = new ClaimAggregator(null);
+		claimAggregator
+				.handleHeaderCategoryClaim(MetaData.RAT_LICENSE_FAMILY_CATEGORY_VALUE_GEN);
 	}
 }

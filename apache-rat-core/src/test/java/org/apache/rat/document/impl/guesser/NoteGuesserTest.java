@@ -23,31 +23,28 @@ import static org.junit.Assert.assertTrue;
 import org.apache.rat.document.MockDocument;
 import org.junit.Test;
 
+/**
+ * The Class NoteGuesserTest.
+ */
 public class NoteGuesserTest {
 
-    @Test
-    public void testMatches() {
-        assertThatGuesserMatches("LICENSE");
-        assertThatGuesserMatches("LICENSE.txt");
-        assertThatGuesserMatches("NOTICE");
-        assertThatGuesserMatches("NOTICE.txt");
-        assertThatGuesserMatches("README");
-        assertThatGuesserMatches("README.txt");
-        assertThatGuesserMatches("src/test/LICENSE");
-        assertThatGuesserMatches("src/test/LICENSE.txt");
-        assertThatGuesserMatches("src/test/NOTICE");
-        assertThatGuesserMatches("src/test/NOTICE.txt");
-        assertThatGuesserMatches("src/test/README");
-        assertThatGuesserMatches("src/test/README.txt");
-        assertThatGuesserMatches("src\\test\\LICENSE");
-        assertThatGuesserMatches("src\\test\\LICENSE.txt");
-        assertThatGuesserMatches("src\\test\\NOTICE");
-        assertThatGuesserMatches("src\\test\\NOTICE.txt");
-        assertThatGuesserMatches("src\\test\\README");
-        assertThatGuesserMatches("src\\test\\README.txt");
-    }
 
-    private void assertThatGuesserMatches(final String name) {
-        assertTrue(new NoteGuesser().matches(new MockDocument(name)));
-    }
+	/**
+	 * Test note guesser matches.
+	 */
+	@Test
+	public void testNoteGuesserMatches() {
+		assertThatGuesserMatches("src\\test\\README.txt");
+	}
+
+	/**
+	 * Assert that guesser matches.
+	 * 
+	 * @param name
+	 *            the name
+	 */
+	private void assertThatGuesserMatches(final String name) {
+		assertTrue("Value must be True",
+				new NoteGuesser().matches(new MockDocument(name)));
+	}
 }

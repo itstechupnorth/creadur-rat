@@ -32,7 +32,6 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.rat.api.Document;
-import org.apache.rat.api.RatException;
 import org.apache.rat.document.impl.ArchiveEntryDocument;
 import org.apache.rat.report.IReportable;
 import org.apache.rat.report.RatReport;
@@ -60,9 +59,8 @@ public class ArchiveWalker extends Walker implements IReportable {
      * @param report the defined RatReport to run on this GZIP walker.
      * 
      */
-    public void run(final RatReport report) throws RatException {
+	public void run(final RatReport report) throws IOException {
 
-        try {
             ArchiveInputStream input;
 
             /* I am really sad that classes aren't first-class objects in
@@ -98,9 +96,6 @@ public class ArchiveWalker extends Walker implements IReportable {
             }
 
             input.close();
-        } catch (IOException e) {
-            throw new RatException(e);
-        }
     }
 
     /**
@@ -110,7 +105,8 @@ public class ArchiveWalker extends Walker implements IReportable {
      * @param file the file to be reported on
      * @throws RatException
      */
-    private void report(final RatReport report, byte[] contents, File file) throws RatException {
+	private void report(final RatReport report, byte[] contents, File file)
+			throws IOException {
 
         Document document = new ArchiveEntryDocument(file, contents);
         report.report(document);
