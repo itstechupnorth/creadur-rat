@@ -28,53 +28,89 @@ import java.io.Reader;
 
 import org.apache.rat.api.Document;
 import org.apache.rat.api.MetaData;
-import org.apache.rat.api.RatException;
 
+/**
+ * The Class ArchiveEntryDocument.
+ */
 public class ArchiveEntryDocument implements Document {
 
-    private byte[] contents;
-    private final String name;
+	/** The contents. */
+	final private byte[] contents;
 
-    private final MetaData metaData = new MetaData();
+	/** The name. */
+	private final String name;
 
-    public ArchiveEntryDocument(File file, byte[] contents) throws RatException {
-        super();
-        name = DocumentImplUtils.toName(file);
-        this.contents = contents;
-    }
+	/** The meta data. */
+	private final MetaData metaData = new MetaData();
 
-    public MetaData getMetaData() {
-        return metaData;
-    }
+	/**
+	 * Instantiates a new archive entry document.
+	 * 
+	 * @param file
+	 *            the file
+	 * @param contents
+	 *            the contents
+	 */
+	public ArchiveEntryDocument(final File file, final byte... contents) {
+		super();
+		name = DocumentImplUtils.toName(file);
+		this.contents = contents.clone();
+	}
 
-    public String getName() {
-        return name;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.api.Document#getMetaData()
+	 */
+	public MetaData getMetaData() {
+		return metaData;
+	}
 
-    public InputStream inputStream() throws IOException {
-        return new ByteArrayInputStream(contents);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.api.Document#getName()
+	 */
+	public String getName() {
+		return name;
+	}
 
-    public boolean isComposite() {
-        return DocumentImplUtils.isZipStream(new ByteArrayInputStream(contents));
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.api.Document#inputStream()
+	 */
+	public InputStream inputStream() throws IOException {
+		return new ByteArrayInputStream(contents);
+	}
 
-    public Reader reader() throws IOException {
-        return new InputStreamReader(new ByteArrayInputStream(contents));
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.api.Document#isComposite()
+	 */
+	public boolean isComposite() {
+		return new DocumentImplUtils().isZipStream(new ByteArrayInputStream(
+				contents));
+	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.rat.api.Document#reader()
+	 */
+	public Reader reader() throws IOException {
+		return new InputStreamReader(new ByteArrayInputStream(contents));
+	}
 
-    /**
-     * Representations suitable for logging.
-     * @return a <code>String</code> representation 
-     * of this object.
-     */
-    @Override
-    public String toString()
-    {
-        return "TarEntryDocument ( "
-            + "name = " + this.name + " "
-            + "metaData = " + this.metaData + " "
-            + " )";
-    }
+	/**
+	 * Representations suitable for logging.
+	 * 
+	 * @return a <code>String</code> representation of this object.
+	 */
+	@Override
+	public String toString() {
+		return "TarEntryDocument ( " + "name = " + this.name + " "
+				+ "metaData = " + this.metaData + " " + " )";
+	}
 }

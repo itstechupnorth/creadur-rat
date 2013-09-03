@@ -16,52 +16,27 @@
  * specific language governing permissions and limitations      *
  * under the License.                                           *
  */
-package org.apache.rat.api;
+
+package org.apache.rat.walker;
+
+import java.io.File;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * The Class RatException.
+ * The Class DirectoryWalkerTest.
  */
-public class RatException extends Exception {
-
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = 4940711222435919034L;
+public class DirectoryWalkerTest {
 
 	/**
-	 * Instantiates a new rat exception.
+	 * Test non is restricted.
 	 */
-	public RatException() {
-		super();
+	@Test
+	public void testNonIsRestricted() {
+		File file = new File("");
+		DirectoryWalker directoryWalker = new DirectoryWalker(file);
+		Assert.assertFalse(directoryWalker.isRestricted());
 	}
 
-	/**
-	 * Instantiates a new rat exception.
-	 * 
-	 * @param message
-	 *            the message
-	 * @param cause
-	 *            the cause
-	 */
-	public RatException(final String message, final Throwable cause) {
-		super(message, cause);
-	}
-
-	/**
-	 * Instantiates a new rat exception.
-	 * 
-	 * @param message
-	 *            the message
-	 */
-	public RatException(final String message) {
-		super(message);
-	}
-
-	/**
-	 * Instantiates a new rat exception.
-	 * 
-	 * @param cause
-	 *            the cause
-	 */
-	public RatException(final Throwable cause) {
-		super(cause);
-	}
 }

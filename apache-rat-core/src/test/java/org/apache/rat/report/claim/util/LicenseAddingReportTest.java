@@ -15,38 +15,38 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
-package org.apache.rat.report.xml.writer;
+ */
 
-import org.apache.rat.report.xml.writer.impl.base.XmlWriter;
-import org.junit.Before;
+package org.apache.rat.report.claim.util;
+
+import java.io.IOException;
+
+import org.apache.rat.api.Document;
+import org.apache.rat.document.impl.FileDocument;
+import org.apache.rat.test.utils.Resources;
 import org.junit.Test;
 
-import java.io.StringWriter;
+/**
+ * The Class LicenseAddingReportTest.
+ */
+public class LicenseAddingReportTest {
 
-import static org.junit.Assert.assertEquals;
-
-public class XmlWriterUtilsTest {
-
-    StringWriter out;
-    IXmlWriter writer;
-
-    @Before
-    public void setUp() throws Exception {
-        out = new StringWriter();
-        writer = new XmlWriter(out);
-        writer.openElement("alpha");
-    }
-
-    @Test
-    public void writeTrue() throws Exception {
-        XmlWriterUtils.writeAttribute(writer, "name", true);
-        assertEquals("Attribute written as True", "<alpha name='true'", out.toString());
-    }
-
-    @Test
-    public void writeFalse() throws Exception {
-        XmlWriterUtils.writeAttribute(writer, "name", false);
-        assertEquals("Attribute written as False", "<alpha name='false'", out.toString());
-    }
+	/**
+	 * Test report.
+	 * 
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testReport() throws IOException {
+		boolean pForced = false;
+		String pCopyrightMsg = "";
+		LicenseAddingReport licenseAddingReport = new LicenseAddingReport(
+				pCopyrightMsg, pForced);
+		Document document = new FileDocument(
+				Resources.getResourceFile("elements/Source.java"));
+		licenseAddingReport.report(document);
+		//Delete File report.
+		Resources.getResourceFile("elements/Source.java.new").delete();
+	}
 }

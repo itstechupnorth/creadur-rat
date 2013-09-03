@@ -15,15 +15,35 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
-package org.apache.rat.report.xml.writer;
+ */
 
-import java.io.IOException;
+package org.apache.rat.walker;
 
-public class XmlWriterUtils {
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 
-    public static final void writeAttribute(final IXmlWriter writer, final String name, final boolean booleanValue) throws IOException {
-        final String value = Boolean.toString(booleanValue);
-        writer.attribute(name, value);
-    }
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * The Class WalkerTest.
+ */
+public class WalkerTest {
+
+
+	/**
+	 * Test regex filter pattern null.
+	 * 
+	 * @throws FileNotFoundException
+	 *             the file not found exception
+	 */
+	@Test
+	public void testRegexFilterPatternNull() throws FileNotFoundException {
+		FilenameFilter filenameFilter = Walker.regexFilter(null);
+		File dir = null;
+		String name = null;
+		Assert.assertTrue(filenameFilter.accept(dir, name));
+	}
+
 }

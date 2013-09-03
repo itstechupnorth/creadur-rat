@@ -24,7 +24,6 @@ import java.util.Calendar;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.rat.api.Document;
 import org.apache.rat.api.MetaData;
-import org.apache.rat.api.RatException;
 import org.apache.rat.report.AbstractReport;
 import org.apache.rat.report.xml.writer.IXmlWriter;
 
@@ -107,19 +106,14 @@ public class SimpleXmlClaimReporter extends AbstractReport {
 	 * org.apache.rat.report.AbstractReport#report(org.apache.rat.api.Document)
 	 */
 	@Override
-	public void report(final Document subject) throws RatException {
-		try {
-			if (firstTime) {
-				firstTime = false;
-			} else {
-				writer.closeElement();
-			}
-			writer.openElement("resource").attribute(NAME, subject.getName());
-			writeDocumentClaims(subject);
-		} catch (IOException e) {
-			throw new RatException("XML writing failure: " + e.getMessage()
-					+ " subject: " + subject, e);
+	public void report(final Document subject) throws IOException {
+		if (firstTime) {
+			firstTime = false;
+		} else {
+			writer.closeElement();
 		}
+		writer.openElement("resource").attribute(NAME, subject.getName());
+		writeDocumentClaims(subject);
 	}
 
 	/**
@@ -229,15 +223,11 @@ public class SimpleXmlClaimReporter extends AbstractReport {
 	 * @see org.apache.rat.report.AbstractReport#startReport()
 	 */
 	@Override
-	public void startReport() throws RatException {
-		try {
-			writer.openElement("rat-report").attribute(
-					"timestamp",
-					DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT
-							.format(Calendar.getInstance()));
-		} catch (IOException e) {
-			throw new RatException("Cannot open start element", e);
-		}
+	public void startReport() throws IOException {
+		writer.openElement("rat-report").attribute(
+				"timestamp",
+				DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(Calendar
+						.getInstance()));
 	}
 
 	/*
@@ -246,11 +236,7 @@ public class SimpleXmlClaimReporter extends AbstractReport {
 	 * @see org.apache.rat.report.AbstractReport#endReport()
 	 */
 	@Override
-	public void endReport() throws RatException {
-		try {
-			writer.closeDocument();
-		} catch (IOException e) {
-			throw new RatException("Cannot close last element", e);
-		}
+	public void endReport() throws IOException {
+		writer.closeDocument();
 	}
 }

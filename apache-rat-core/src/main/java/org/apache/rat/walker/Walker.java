@@ -30,49 +30,92 @@ import org.apache.rat.report.IReportable;
  */
 public abstract class Walker implements IReportable {
 
-    protected final File file;
-    protected final String name;
+	/** The file. */
+	protected final File file;
 
-    protected final FilenameFilter filter;
+	/** The name. */
+	protected final String name;
 
-    protected static FilenameFilter regexFilter(final Pattern pattern) {
-        return new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                final boolean result;
-                if (pattern == null) {
-                    result = true;
-                } else {
-                    result = !pattern.matcher(name).matches();
-                }
-                return result;
-            }
-        };
-    }
+	/** The filter. */
+	protected final FilenameFilter filter;
 
-    protected boolean isRestricted(File file) {
-        String name = file.getName();
-        boolean result = name.startsWith(".");
-        return result;
-    }
- 
-    protected final boolean ignored(final File file) {
-        boolean result = false;
-        if (filter != null) {
-            final String name = file.getName();
-            final File dir = file.getParentFile();
-            result = !filter.accept(dir, name);
-        }
-        return result;
-    }
+	/**
+	 * Regex filter.
+	 * 
+	 * @param pattern
+	 *            the pattern
+	 * @return the filename filter
+	 */
+	protected static FilenameFilter regexFilter(final Pattern pattern) {
+		return new FilenameFilter() {
+			public boolean accept(final File dir, final String name) {
+				boolean result = false;
+				if (pattern == null) {
+					result = true;
+				} else {
+					result ^= pattern.matcher(name).matches();
+				}
+				return result;
+			}
+		};
+	}
 
-    public Walker(File file, final FilenameFilter filter) {
-        this(file.getPath(), file, filter);
-    }
+	/**
+	 * Checks if is restricted.
+	 * 
+	 * @param file
+	 *            the file
+	 * @return true, if is restricted
+	 */
+	protected boolean isRestricted(final File file) {
+		String name = file.getName();
+		return name.charAt(0) == '.';
+	}
 
-    protected Walker(final String name, final File file, final FilenameFilter filter) {
-        this.name = name;
-        this.file = file;
-        this.filter = filter;
-    }
+	/**
+	 * Ignored.
+	 * 
+	 * @param file
+	 *            the file
+	 * @return true, if successful
+	 */
+	protected final boolean ignored(final File file) {
+		boolean result = false;
+		if (filter != null) {
+			final String name = file.getName();
+			final File dir = file.getParentFile();
+			result ^= filter.accept(dir, name);
+		}
+		return result;
+	}
+
+	/**
+	 * Instantiates a new walker.
+	 * 
+	 * @param file
+	 *            the file
+	 * @param filter
+	 *            the filter
+	 */
+	public Walker(final File file, final FilenameFilter filter) {
+		this(file.getPath(), file, filter);
+	}
+
+	/**
+	 * Instantiates a new walker.
+	 * 
+	 * @param name
+	 *            the name
+	 * @param file
+	 *            the file
+	 * @param filter
+	 *            the filter
+	 */
+	protected Walker(final String name, final File file,
+			final FilenameFilter filter) {
+		this.name = name;
+		this.file = file;
+		this.filter = filter;
+	}
 
 }

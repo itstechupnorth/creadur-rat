@@ -15,43 +15,64 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat.document.impl;
+
+import static org.junit.Assert.assertEquals;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.Reader;
 
 import org.apache.rat.api.Document;
 import org.apache.rat.test.utils.Resources;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.Reader;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
+/**
+ * The Class SingularFileDocumentTest.
+ */
 public class SingularFileDocumentTest {
-    private Document document;
-    private File file;
-    
-    @Before
-    public void setUp() throws Exception {
-        file = Resources.getResourceFile("elements/Source.java");
-        document = new MonolithicFileDocument(file);
-    }
 
-    @Test
-    public void reader() throws Exception {
-        Reader reader = document.reader();
-        assertNotNull("Reader should be returned", reader);
-        assertEquals("First file line expected", "package elements;", 
-                 new BufferedReader(reader).readLine());
-    }
+	/** The document. */
+	private Document document;
 
-    @Test
-    public void getName() {
-        final String name = document.getName();
-        assertNotNull("Name is set", name);
-        assertEquals("Name is filename", DocumentImplUtils.toName(file), name);
-    }
+	/** The file. */
+	private File file;
+
+	/**
+	 * Sets the up.
+	 * 
+	 * @throws FileNotFoundException
+	 *             the file not found exception
+	 */
+	@Before
+	public void setUp() throws FileNotFoundException {
+		file = Resources.getResourceFile("elements/Source.java");
+		document = new MonolithicFileDocument(file);
+	}
+
+	/**
+	 * Test reader.
+	 * 
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testReader() throws IOException {
+		Reader reader = document.reader();
+		assertEquals("First file line expected", "package elements;",
+				new BufferedReader(reader).readLine());
+	}
+
+	/**
+	 * Test get name.
+	 */
+	@Test
+	public void testGetName() {
+		final String name = document.getName();
+		assertEquals("Name is filename", DocumentImplUtils.toName(file), name);
+	}
 }

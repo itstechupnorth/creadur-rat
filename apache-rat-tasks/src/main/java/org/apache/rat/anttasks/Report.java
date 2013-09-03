@@ -42,7 +42,6 @@ import org.apache.rat.Defaults;
 import org.apache.rat.ReportConfiguration;
 import org.apache.rat.analysis.IHeaderMatcher;
 import org.apache.rat.analysis.util.HeaderMatcherMultiplexer;
-import org.apache.rat.api.RatException;
 import org.apache.rat.license.ILicenseFamily;
 
 /**
@@ -199,8 +198,6 @@ public class Report extends Task {
             throw new BuildException(e);
         } catch (InterruptedException e) {
             throw new BuildException(e);
-        } catch (RatException e) {
-            throw new BuildException(e);
         } finally {
             if (reportFile != null) {
                 FileUtils.close(out);
@@ -241,7 +238,7 @@ public class Report extends Task {
      * @throws TransformerException 
      * @throws RatException 
      */
-    private void createReport(PrintWriter out) throws IOException, TransformerException, InterruptedException, RatException {
+    private void createReport(PrintWriter out) throws IOException, TransformerException, InterruptedException {
         final ReportConfiguration configuration = new ReportConfiguration();
         configuration.setHeaderMatcher(new HeaderMatcherMultiplexer(getLicenseMatchers()));
         configuration.setApprovedLicenseNames(getApprovedLicenseNames());
@@ -263,7 +260,7 @@ public class Report extends Task {
             InputStream style = null;
             try {
                 if (format.getValue().equals(Format.PLAIN_KEY)) {
-                    style = Defaults.getPlainStyleSheet();
+                    style = new Defaults().getPlainStyleSheet();
                 } else if (format.getValue().equals(Format.STYLED_KEY)) {
                     style = stylesheet.getInputStream();
                 } else {
