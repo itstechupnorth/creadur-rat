@@ -15,7 +15,7 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat;
 
 import java.io.InputStream;
@@ -29,39 +29,81 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-
+/**
+ * The Class ReportTransformer.
+ */
 class ReportTransformer implements Runnable {
 
-    private final Writer out;
-    private final Transformer transformer;
-    private final Reader in;
-    
-    public ReportTransformer(final Writer out, final Reader style, 
-            final Reader in) throws TransformerConfigurationException {
-        this.out = out;
-        transformer = TransformerFactory.newInstance().newTransformer(
-                new StreamSource(style));
-        this.in = in;
-    }
-    
-    public ReportTransformer(final Writer out, final InputStream style, 
-            final Reader in) throws TransformerConfigurationException {
-        this.out = out;
-        transformer = TransformerFactory.newInstance().newTransformer(
-                new StreamSource(style));
-        this.in = in;
-    }
-    
-    public void run() {
-        try {
-            transform();
-        } catch (TransformerException e) {
-            throw new ReportFailedRuntimeException(e.getMessage(), e);
-        }
-    }
+	/** The out. */
+	private final Writer out;
 
-    public void transform() throws TransformerException {
-        transformer.transform(new StreamSource(in), new StreamResult(out));
-    }
+	/** The transformer. */
+	private final Transformer transformer;
+
+	/** The in. */
+	private final Reader reader;
+
+	/**
+	 * Instantiates a new report transformer.
+	 * 
+	 * @param out
+	 *            the out
+	 * @param style
+	 *            the style
+	 * @param in
+	 *            the in
+	 * @throws TransformerConfigurationException
+	 *             the transformer configuration exception
+	 */
+	public ReportTransformer(final Writer out, final Reader style,
+			final Reader reader) throws TransformerConfigurationException {
+		this.out = out;
+		transformer = TransformerFactory.newInstance().newTransformer(
+				new StreamSource(style));
+		this.reader = reader;
+	}
+
+	/**
+	 * Instantiates a new report transformer.
+	 * 
+	 * @param out
+	 *            the out
+	 * @param style
+	 *            the style
+	 * @param in
+	 *            the in
+	 * @throws TransformerConfigurationException
+	 *             the transformer configuration exception
+	 */
+	public ReportTransformer(final Writer out, final InputStream style,
+			final Reader reader) throws TransformerConfigurationException {
+		this.out = out;
+		transformer = TransformerFactory.newInstance().newTransformer(
+				new StreamSource(style));
+		this.reader = reader;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
+	public void run() {
+		try {
+			transform();
+		} catch (TransformerException e) {
+			throw new ReportFailedRuntimeException(e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Transform.
+	 * 
+	 * @throws TransformerException
+	 *             the transformer exception
+	 */
+	public void transform() throws TransformerException {
+		transformer.transform(new StreamSource(reader), new StreamResult(out));
+	}
 
 }

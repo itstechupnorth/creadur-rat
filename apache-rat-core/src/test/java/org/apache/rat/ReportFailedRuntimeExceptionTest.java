@@ -22,26 +22,52 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+
 /**
- * The Class DefaultsTest.
+ * The Class ReportFailedRuntimeExceptionTest.
  */
-public class DefaultsTest {
+public class ReportFailedRuntimeExceptionTest {
+
 
 	/**
-	 * Test get default style sheet.
+	 * Test new exception.
 	 */
 	@Test
-	public void testGetDefaultStyleSheet() {
-		Defaults defaults = new Defaults();
-		assertNotNull("Not to be null", defaults.getDefaultStyleSheet());
+	public void testNewException() {
+		ReportFailedRuntimeException exception = new ReportFailedRuntimeException();
+		assertNotNull("Not to be null", exception);
 	}
 
 	/**
-	 * Test create default matcher.
+	 * Test new exception message.
 	 */
 	@Test
-	public void testCreateDefaultMatcher() {
-		Defaults defaults = new Defaults();
-		assertNotNull("Not to be null", defaults.createDefaultMatcher());
+	public void testNewExceptionMessage() {
+		ReportFailedRuntimeException exception = new ReportFailedRuntimeException(
+				"Test");
+		assertNotNull("Not to be null", exception);
 	}
+
+	/**
+	 * Test new exception throwable.
+	 */
+	@Test
+	public void testNewExceptionThrowable() {
+		Throwable t = null;
+		ReportFailedRuntimeException exception = new ReportFailedRuntimeException(
+				t);
+		assertNotNull("Not to be null", exception);
+	}
+
+	/**
+	 * Test new exception throwable message.
+	 */
+	@Test
+	public void testNewExceptionThrowableMessage() {
+		Throwable t = null;
+		ReportFailedRuntimeException exception = new ReportFailedRuntimeException(
+				"Test", t);
+		assertNotNull("Not to be null", exception);
+	}
+
 }
