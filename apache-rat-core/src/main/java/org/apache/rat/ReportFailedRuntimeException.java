@@ -15,29 +15,54 @@
  * KIND, either express or implied.  See the License for the    *
  * specific language governing permissions and limitations      *
  * under the License.                                           *
- */ 
+ */
 package org.apache.rat;
 
 /**
  * Indicates that a report has failed in a fatal manner.
  */
 class ReportFailedRuntimeException extends RuntimeException {
-    
-    private static final long serialVersionUID = -7605175211996815712L;
 
-    public ReportFailedRuntimeException() {
-        super();
-    }
+	/** The Constant serialVersionUID. */
+	private static final long serialVersionUID = -7605175211996815712L;
 
-    public ReportFailedRuntimeException(String message, Throwable t) {
-        super(message, t);
-    }
+	/**
+	 * Instantiates a new report failed runtime exception.
+	 */
+	public ReportFailedRuntimeException() {
+		super();
+	}
 
-    public ReportFailedRuntimeException(String message) {
-        super(message);
-    }
+	/**
+	 * Instantiates a new report failed runtime exception.
+	 * 
+	 * @param message
+	 *            the message
+	 * @param t
+	 *            the t
+	 */
+	public ReportFailedRuntimeException(final String message,
+			final Throwable throwable) {
+		super(message, throwable);
+	}
 
-    public ReportFailedRuntimeException(Throwable t) {
-        super(t);
-    }    
+	/**
+	 * Instantiates a new report failed runtime exception.
+	 * 
+	 * @param message
+	 *            the message
+	 */
+	public ReportFailedRuntimeException(final String message) {
+		super(message);
+	}
+
+	/**
+	 * Instantiates a new report failed runtime exception.
+	 * 
+	 * @param t
+	 *            the t
+	 */
+	public ReportFailedRuntimeException(final Throwable throwable) {
+		super(throwable);
+	}
 }
