@@ -27,6 +27,7 @@ import org.apache.rat.api.Document;
  */
 public class ArchiveGuesser {
     
+	/** The Constant ARCHIVE_EXTENSIONS. */
     public static final String[] ARCHIVE_EXTENSIONS = {
         "jar", "gz",
         "zip", "tar",
@@ -35,10 +36,6 @@ public class ArchiveGuesser {
         "ear", "mar",
         "par", "xar",
     };
-
-	/** The Constant ARCHIVE_EXTENSIONS. */
-	private static final String[] ARCHIVE_EXTENSIONS = { "jar", "gz", "zip",
-			"tar", "bz", "bz2", "rar", "war", };
 
 	/** The archive extensions. */
 	private final String[] archiveExtensions;
