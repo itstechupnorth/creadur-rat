@@ -109,16 +109,27 @@ public abstract class AbstractLicenceAppender {
 	/** The Constant TYPE_VISUAL_STUDIO_SOLUTION. */
 	private static final int TYPE_VISUAL_STUDIO_SOLUTION = 22;
 
+	/** The Constant TYPE_BEANSHELL. */
+	private static final int TYPE_BEANSHELL = 23;
+
+	/** The Constant TYPE_JSP. */
+	private static final int TYPE_JSP = 24;
+
+	/** The Constant TYPE_FML. */
+	private static final int TYPE_FML = 25;
+
+
 	/** the line separator for this OS. */
 	private static final String LINE_SEP = System.getProperty("line.separator");
 
 	/** The Constant FAMILY_C. */
 	private static final int[] FAMILY_C = new int[] { TYPE_JAVA,
 			TYPE_JAVASCRIPT, TYPE_C, TYPE_H, TYPE_SCALA, TYPE_CSS, TYPE_CPP,
-			TYPE_CSHARP, TYPE_PHP, TYPE_GROOVY, };
+			TYPE_CSHARP, TYPE_PHP, TYPE_GROOVY, TYPE_BEANSHELL, };
 
 	/** The Constant FAMILY_SGML. */
-	private static final int[] FAMILY_SGML = new int[] { TYPE_XML, TYPE_HTML, };
+	private static final int[] FAMILY_SGML = new int[] { TYPE_XML, TYPE_HTML,
+			TYPE_JSP, TYPE_FML, };
 
 	/** The Constant FAMILY_SH. */
 	private static final int[] FAMILY_SH = new int[] { TYPE_PROPERTIES,
@@ -180,6 +191,7 @@ public abstract class AbstractLicenceAppender {
 		EXT2TYPE.put("ascx", Integer.valueOf(TYPE_HTML));
 		EXT2TYPE.put("aspx", Integer.valueOf(TYPE_HTML));
 		EXT2TYPE.put("bat", Integer.valueOf(TYPE_BAT));
+		EXT2TYPE.put("bsh", Integer.valueOf(TYPE_BEANSHELL));
 		EXT2TYPE.put("c", Integer.valueOf(TYPE_C));
 		EXT2TYPE.put("cc", Integer.valueOf(TYPE_CPP));
 		EXT2TYPE.put("cmd", Integer.valueOf(TYPE_BAT));
@@ -190,6 +202,7 @@ public abstract class AbstractLicenceAppender {
 		EXT2TYPE.put("csproj", Integer.valueOf(TYPE_XML));
 		EXT2TYPE.put("css", Integer.valueOf(TYPE_CSS));
 		EXT2TYPE.put("fxcop", Integer.valueOf(TYPE_XML));
+		EXT2TYPE.put("fml", Integer.valueOf(TYPE_FML));
 		EXT2TYPE.put("groovy", Integer.valueOf(TYPE_GROOVY));
 		EXT2TYPE.put("h", Integer.valueOf(TYPE_H));
 		EXT2TYPE.put("hh", Integer.valueOf(TYPE_H));
@@ -198,6 +211,7 @@ public abstract class AbstractLicenceAppender {
 		EXT2TYPE.put("html", Integer.valueOf(TYPE_HTML));
 		EXT2TYPE.put("java", Integer.valueOf(TYPE_JAVA));
 		EXT2TYPE.put("js", Integer.valueOf(TYPE_JAVASCRIPT));
+		EXT2TYPE.put("jsp", Integer.valueOf(TYPE_JSP));
 		EXT2TYPE.put("ndoc", Integer.valueOf(TYPE_XML));
 		EXT2TYPE.put("nunit", Integer.valueOf(TYPE_XML));
 		EXT2TYPE.put("php", Integer.valueOf(TYPE_PHP));
@@ -358,14 +372,17 @@ public abstract class AbstractLicenceAppender {
 
 					if (expectsPackage && line.startsWith("package ")) {
 						written = true;
+						writer.write(LINE_SEP);
 						writer.write(getLicenceHeader(document));
 						writer.write(LINE_SEP);
 					} else if (expectsXMLDecl && line.startsWith("<?xml ")) {
 						written = true;
+						writer.write(LINE_SEP);
 						writer.write(getLicenceHeader(document));
 						writer.write(LINE_SEP);
 					} else if (expectsPhpPI && line.startsWith("<?php")) {
 						written = true;
+						writer.write(LINE_SEP);
 						writer.write(getLicenceHeader(document));
 						writer.write(LINE_SEP);
 					}
@@ -468,12 +485,6 @@ public abstract class AbstractLicenceAppender {
 			result = "/*" + LINE_SEP;
 		} else if (isFamilySGML(type)) {
 			result = "<!--" + LINE_SEP;
-		} else if (isFamilyAPT(type)) {
-			result = "~~" + LINE_SEP;
-		} else if (isFamilySH(type)) {
-			result = "#" + LINE_SEP;
-		} else if (isFamilyBAT(type)) {
-			result = "rem" + LINE_SEP;
 		}
 		return result;
 	}
@@ -489,15 +500,9 @@ public abstract class AbstractLicenceAppender {
 	protected String getLastLine(final int type) {
 		String result = "";
 		if (isFamilyC(type)) {
-			result = "*/" + LINE_SEP;
+			result = " */" + LINE_SEP;
 		} else if (isFamilySGML(type)) {
 			result = "-->" + LINE_SEP;
-		} else if (isFamilyAPT(type)) {
-			result = "~~" + LINE_SEP;
-		} else if (isFamilySH(type)) {
-			result = "#" + LINE_SEP;
-		} else if (isFamilyBAT(type)) {
-			result = "rem" + LINE_SEP;
 		}
 		return result;
 	}
@@ -513,21 +518,18 @@ public abstract class AbstractLicenceAppender {
 	 */
 	protected String getLine(final int type, String content) {
 		String result = "";
-		if (content != null && content.length() > 0) {
-			content = " " + content;
-		}
 		if (isFamilyC(type)) {
-			result = " *" + content + LINE_SEP;
+			result = " * " + content + LINE_SEP;
 		} else if (isFamilySGML(type)) {
 			result = content + LINE_SEP;
 		} else if (isFamilyAPT(type)) {
-			result = "~~" + content + LINE_SEP;
+			result = "~~ " + content + LINE_SEP;
 		} else if (isFamilySH(type)) {
-			result = "#" + content + LINE_SEP;
+			result = "# " + content + LINE_SEP;
 		} else if (isFamilyBAT(type)) {
-			result = "rem" + content + LINE_SEP;
+			result = "rem " + content + LINE_SEP;
 		} else if (isFamilyVelocity(type)) {
-			result = "##" + content + LINE_SEP;
+			result = "## " + content + LINE_SEP;
 		}
 		return result;
 	}

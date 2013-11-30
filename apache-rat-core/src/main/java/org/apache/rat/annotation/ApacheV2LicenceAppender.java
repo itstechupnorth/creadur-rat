@@ -66,7 +66,6 @@ public class ApacheV2LicenceAppender extends AbstractLicenceAppender {
 		StringBuilder stringBuilder = new StringBuilder();
 		if (copyright == null) {
 			stringBuilder.append(getFirstLine(type));
-			stringBuilder.append(getLine(type, EMPTY));
 			stringBuilder
 					.append(getLine(type,
 					"Licensed to the Apache Software Foundation (ASF) under one"));
@@ -105,11 +104,9 @@ public class ApacheV2LicenceAppender extends AbstractLicenceAppender {
 			stringBuilder.append(getLine(type,
 					"specific language governing permissions and limitations"));
 			stringBuilder.append(getLine(type, "under the License."));
-			stringBuilder.append(getLine(type, EMPTY));
 			stringBuilder.append(getLastLine(type));
 		} else {
 			stringBuilder.append(getFirstLine(type));
-			stringBuilder.append(getLine(type, EMPTY));
 			stringBuilder.append(getLine(type, copyright));
 			stringBuilder.append(getLine(type, EMPTY));
 			stringBuilder
@@ -139,7 +136,6 @@ public class ApacheV2LicenceAppender extends AbstractLicenceAppender {
 			stringBuilder.append(getLine(type,
 					"specific language governing permissions and limitations"));
 			stringBuilder.append(getLine(type, "under the License."));
-			stringBuilder.append(getLine(type, EMPTY));
 			stringBuilder.append(getLastLine(type));
 		}
 		return stringBuilder.toString();
